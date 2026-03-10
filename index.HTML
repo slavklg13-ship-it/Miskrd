@@ -1,1300 +1,1390 @@
 <!DOCTYPE html>
+
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <title>AI МИС — Ортопедия и регенеративная медицина</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    :root {
-      --bg: #f3f6fb;
-      --bg-alt: #ffffff;
-      --primary: #2563eb;
-      --primary-soft: #dbeafe;
-      --primary-dark: #1d4ed8;
-      --accent: #10b981;
-      --danger: #ef4444;
-      --border: #e2e8f0;
-      --text-main: #0f172a;
-      --text-muted: #6b7280;
-      --radius: 10px;
-      --shadow-soft: 0 10px 30px rgba(15,23,42,0.08);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>АльтернативА МИС</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:-apple-system,system-ui,sans-serif;background:#f0f4f8;color:#1a202c;-webkit-font-smoothing:antialiased}
+body{overflow:hidden}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:#cbd5e0;border-radius:4px}
 
-    * {
-      box-sizing: border-box;
-    }
+/* ── LOGIN ── */
+#screen-login{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0f172a;z-index:999}
+#screen-login.hidden{display:none!important}
+.l-orb1{position:absolute;width:500px;height:500px;border-radius:50%;top:-200px;left:-200px;background:radial-gradient(circle,rgba(0,113,198,.25),transparent 70%);pointer-events:none}
+.l-orb2{position:absolute;width:400px;height:400px;border-radius:50%;bottom:-150px;right:-150px;background:radial-gradient(circle,rgba(124,58,237,.2),transparent 70%);pointer-events:none}
+.l-grid{position:absolute;inset:0;opacity:.04;background:linear-gradient(rgba(255,255,255,1) 1px,transparent 1px) 0 0/48px 48px,linear-gradient(90deg,rgba(255,255,255,1) 1px,transparent 1px) 0 0/48px 48px;pointer-events:none}
+.l-card{position:relative;z-index:1;width:420px}
+.l-logo{display:flex;align-items:center;gap:14px;justify-content:center;margin-bottom:32px}
+.l-mark{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#0071c6,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 8px 28px rgba(0,113,198,.5)}
+.l-name{color:#fff;font-size:28px;font-weight:300;letter-spacing:-.5px}
+.l-sub{color:rgba(255,255,255,.4);font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-top:2px}
+.l-box{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:20px;padding:36px}
+.l-roles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+.l-role{padding:16px 8px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);text-align:center;cursor:pointer;color:rgba(255,255,255,.5);transition:.15s}
+.l-role:hover,.l-role.on{border-color:#0071c6;background:rgba(0,113,198,.2);color:#fff}
+.l-role .ico{font-size:26px;margin-bottom:6px}
+.l-role .lbl{font-size:11px;font-weight:600}
+.l-lbl{display:block;font-size:10px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px}
+.l-inp{display:block;width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:13px 16px;font-size:15px;color:#fff;margin-bottom:14px;font-family:inherit;transition:.15s}
+.l-inp:focus{outline:none;border-color:rgba(0,113,198,.7);background:rgba(0,113,198,.1)}
+.l-inp::placeholder{color:rgba(255,255,255,.3)}
+.l-btn{display:block;width:100%;padding:15px;border-radius:12px;font-size:15px;font-weight:700;color:#fff;background:linear-gradient(135deg,#0071c6,#7c3aed);border:none;cursor:pointer;font-family:inherit;transition:.2s;margin-top:4px}
+.l-btn:hover{opacity:.92;transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,113,198,.45)}
+.l-btn:active{transform:translateY(0)}
+.l-err{background:rgba(220,38,38,.18);border:1px solid rgba(220,38,38,.4);border-radius:8px;padding:10px 14px;font-size:13px;color:#fca5a5;margin-bottom:14px;display:none}
+.l-err.show{display:block}
+.l-hint{text-align:center;font-size:11px;color:rgba(255,255,255,.3);margin-top:18px;line-height:1.9}
+.l-hint b{color:rgba(255,255,255,.55);font-family:monospace;font-weight:normal}
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top left,#eff6ff,#e0f2fe,#f9fafb);
-      color: var(--text-main);
-      height: 100%;
-    }
+/* ── APP ── */
+#screen-app{position:fixed;inset:0;display:none;flex-direction:row}
+#screen-app.visible{display:flex}
 
-    body {
-      display: flex;
-      min-height: 100vh;
-    }
+/* ── SIDEBAR ── */
+#sb{width:224px;flex-shrink:0;background:#fff;border-right:1px solid #e2e8f0;display:flex;flex-direction:column;overflow-y:auto}
+.sb-head{height:57px;display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid #f1f5f9;flex-shrink:0}
+.sb-mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#0071c6,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.sb-title{font-size:15px;font-weight:700;color:#0f172a;letter-spacing:-.3px}
+.sb-section{padding:10px 10px 4px}
+.sb-sec-lbl{display:block;font-size:9px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:2.5px;padding:0 6px 4px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:8px;font-size:13px;font-weight:500;color:#475569;cursor:pointer;transition:.12s;user-select:none}
+.sb-item:hover{background:#f1f5f9;color:#0f172a}
+.sb-item.on{background:#eff6ff;color:#0071c6;font-weight:600}
+.sb-item.off{opacity:.35;pointer-events:none}
+.sb-ico{width:18px;text-align:center;flex-shrink:0}
+.sb-lbl{flex:1}
+.sb-cnt{font-size:10px;font-weight:700;background:#0071c6;color:#fff;padding:1px 6px;border-radius:20px}
+.sb-cnt.zero{background:#e2e8f0;color:#64748b}
+.sb-foot{margin-top:auto;padding:12px;border-top:1px solid #f1f5f9;flex-shrink:0}
+.sb-user{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:8px;background:#f8fafc;border:1px solid #e2e8f0}
+.sb-uname{font-size:12px;font-weight:600;color:#1e293b}
+.sb-urole{font-size:10px;color:#94a3b8}
+.sb-dot{width:7px;height:7px;border-radius:50%;background:#10b981;margin-left:auto;flex-shrink:0}
 
-    /* Layout */
+/* ── TOPBAR ── */
+#tb{height:57px;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.tb-search{display:flex;align-items:center;gap:8px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:7px 12px;width:240px}
+.tb-search input{background:transparent;border:none;font-size:13px;color:#1e293b;width:100%;font-family:inherit}
+.tb-search input:focus{outline:none}
+.tb-search input::placeholder{color:#94a3b8}
+.tb-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;border:1px solid}
+.tb-ico{width:34px;height:34px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;font-size:15px}
+.tb-ico:hover{background:#f1f5f9}
+.tb-nd{position:absolute;top:6px;right:6px;width:6px;height:6px;border-radius:50%;background:#dc2626;border:1.5px solid #fff}
+.tb-user{display:flex;align-items:center;gap:8px;padding-left:12px;border-left:1px solid #e2e8f0}
+.tb-uname{font-size:13px;font-weight:600;color:#334155}
+.tb-out{font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;border:1px solid #e2e8f0;background:#fff;color:#475569;cursor:pointer;font-family:inherit;transition:.12s}
+.tb-out:hover{border-color:#dc2626;color:#dc2626;background:#fff5f5}
 
-    .sidebar {
-      width: 260px;
-      background: linear-gradient(180deg,#020617,#0f172a);
-      color: #e5e7eb;
-      padding: 18px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
+/* ── CONTENT ── */
+#content{flex:1;overflow-y:auto;padding:24px;background:#f8fafc;min-width:0}
+.page{display:none}.page.on{display:block;animation:fadein .2s ease}
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-    .logo-badge {
-      width: 32px;
-      height: 32px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 20%, #38bdf8, #1d4ed8 60%, #0f172a);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      font-weight: 700;
-      color: white;
-      box-shadow: 0 0 0 1px rgba(191, 219, 254, 0.3);
-    }
-    .logo-text {
-      display: flex;
-      flex-direction: column;
-      font-size: 14px;
-    }
-    .logo-text span:first-child {
-      font-weight: 600;
-    }
-    .logo-text span:last-child {
-      color: #9ca3af;
-      font-size: 11px;
-    }
+/* ── AVATAR ── */
+.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0}
+.av-s{width:28px;height:28px;font-size:10px}
+.av-m{width:34px;height:34px;font-size:12px}
+.av-l{width:44px;height:44px;font-size:14px}
 
-    .role-select {
-      background: rgba(15,23,42,0.95);
-      border-radius: var(--radius);
-      padding: 10px;
-      border: 1px solid rgba(55,65,81,0.8);
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      box-shadow: 0 12px 30px rgba(15,23,42,0.6);
-    }
-    .role-select label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: #9ca3af;
-    }
-    .role-select select {
-      width: 100%;
-      padding: 6px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(55,65,81,0.8);
-      background: #020617;
-      color: #e5e7eb;
-      font-size: 13px;
-      outline: none;
-    }
+/* ── PAGE HEADER ── */
+.ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;gap:12px}
+.ph-t{font-size:24px;font-weight:700;color:#0f172a;letter-spacing:-.5px}
+.ph-s{font-size:13px;color:#94a3b8;margin-top:4px}
+.ph-a{display:flex;align-items:center;gap:8px;flex-shrink:0}
 
-    .nav-section-title {
-      margin-top: 8px;
-      margin-bottom: 4px;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #6b7280;
-    }
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:6px;font-weight:600;border-radius:8px;cursor:pointer;transition:.12s;white-space:nowrap;border:none;font-family:inherit;user-select:none}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-p{background:#0071c6;color:#fff}
+.btn-p:hover:not(:disabled){background:#005aa0}
+.btn-s{background:#fff;color:#334155;border:1px solid #e2e8f0}
+.btn-s:hover:not(:disabled){background:#f8fafc;border-color:#cbd5e1}
+.btn-d{background:#dc2626;color:#fff}
+.btn-d:hover:not(:disabled){background:#b91c1c}
+.btn-g{background:transparent;color:#475569}
+.btn-g:hover:not(:disabled){background:#f1f5f9}
+.b-lg{font-size:14px;padding:10px 18px}
+.b-md{font-size:13px;padding:8px 14px}
+.b-sm{font-size:12px;padding:5px 11px}
+.b-xs{font-size:11px;padding:3px 8px}
 
-    .nav {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700;border:1px solid}
+.bdbl{background:#eff6ff;color:#0071c6;border-color:#bfdbfe}
+.bdgr{background:#f0fdf4;color:#059669;border-color:#bbf7d0}
+.bdam{background:#fffbeb;color:#d97706;border-color:#fde68a}
+.bdre{background:#fff5f5;color:#dc2626;border-color:#fecaca}
+.bdvi{background:#f5f3ff;color:#7c3aed;border-color:#ddd6fe}
+.bdsl{background:#f1f5f9;color:#64748b;border-color:#e2e8f0}
 
-    .nav button {
-      width: 100%;
-      background: transparent;
-      border-radius: 999px;
-      border: none;
-      color: #e5e7eb;
-      padding: 8px 10px;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .nav button span.icon {
-      width: 20px;
-      text-align: center;
-      font-size: 15px;
-    }
-    .nav button.active,
-    .nav button:hover {
-      background: rgba(37,99,235,0.25);
-    }
+/* ── CARD ── */
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.cp{padding:20px}
 
-    .sidebar-footer {
-      margin-top: auto;
-      font-size: 11px;
-      color: #6b7280;
-      border-top: 1px solid rgba(31,41,55,0.9);
-      padding-top: 8px;
-    }
+/* ── STAT CARDS ── */
+.sc{border-radius:12px;padding:20px;color:#fff;position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.12);transition:.2s;cursor:default}
+.sc:hover{transform:translateY(-2px)}
+.sc::after{content:’’;position:absolute;right:-16px;top:-16px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.1)}
+.sc-v{font-size:36px;font-weight:800;line-height:1;letter-spacing:-1px}
+.sc-l{font-size:12px;opacity:.85;margin-top:10px;font-weight:500}
+.sc-i{position:absolute;right:16px;top:14px;font-size:28px;opacity:.2}
 
-    .main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      padding: 14px 18px;
-      gap: 10px;
-    }
+/* ── TABLE ── */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;padding:10px 14px;font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1.5px;border-bottom:1px solid #f1f5f9;background:rgba(248,250,252,.9)}
+.tbl td{padding:11px 14px;border-bottom:1px solid #f8fafc;vertical-align:middle}
+.tbl tbody tr{transition:.1s;cursor:pointer}
+.tbl tbody tr:hover{background:rgba(0,113,198,.03)}
+.tbl tbody tr:last-child td{border-bottom:none}
 
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
+/* ── MODAL ── */
+.overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(15,23,42,.55);align-items:center;justify-content:center;padding:16px}
+.overlay.open{display:flex;animation:fadein .15s ease}
+.modal{background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.2);width:100%;max-height:90vh;overflow-y:auto;animation:scalein .2s cubic-bezier(.22,1,.36,1)}
+.m-sm{max-width:440px}.m-md{max-width:580px}.m-lg{max-width:700px}
+.m-head{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid #f1f5f9}
+.m-tit{font-size:18px;font-weight:700;color:#0f172a}
+.m-x{width:28px;height:28px;border-radius:8px;border:none;background:transparent;font-size:16px;cursor:pointer;color:#94a3b8;display:flex;align-items:center;justify-content:center;transition:.12s}
+.m-x:hover{background:#f1f5f9;color:#475569}
+.m-body{padding:20px 24px 24px}
+.m-foot{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding-top:16px;margin-top:4px;border-top:1px solid #f1f5f9}
 
-    .topbar-left {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
+/* ── FORMS ── */
+.fl{display:block;font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:1.8px;margin-bottom:6px}
+.fc{width:100%;background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;font-size:13px;color:#1e293b;transition:.15s;font-family:inherit}
+.fc:focus{outline:none;border-color:#0071c6;box-shadow:0 0 0 3px rgba(0,113,198,.1)}
+.fc::placeholder{color:#94a3b8}
+select.fc{appearance:none;background-image:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘10’ height=‘6’%3E%3Cpath d=‘M1 1l4 4 4-4’ stroke=’%2394a3b8’ stroke-width=‘1.5’ fill=‘none’ stroke-linecap=‘round’/%3E%3C/svg%3E”);background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;cursor:pointer}
+textarea.fc{resize:vertical;min-height:70px}
+.fg{margin-bottom:12px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 
-    .topbar-title {
-      font-size: 18px;
-      font-weight: 600;
-    }
-    .topbar-sub {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
+/* ── SECTION HEADING ── */
+.sh{font-size:10px;font-weight:800;color:#0071c6;text-transform:uppercase;letter-spacing:2px;padding-bottom:8px;margin-bottom:14px;border-bottom:1px solid #bfdbfe}
 
-    .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+/* ── ALERTS ── */
+.al{display:flex;gap:10px;padding:10px 14px;border-radius:8px;font-size:13px;border:1px solid;margin-bottom:8px;line-height:1.5}
+.al-b{background:#eff6ff;border-color:#bfdbfe;color:#1e40af}
+.al-g{background:#f0fdf4;border-color:#bbf7d0;color:#14532d}
+.al-a{background:#fffbeb;border-color:#fde68a;color:#92400e}
+.al-r{background:#fff5f5;border-color:#fecaca;color:#991b1b}
+.al-v{background:#f5f3ff;border-color:#ddd6fe;color:#4c1d95}
 
-    .btn {
-      border-radius: 999px;
-      border: none;
-      padding: 7px 12px;
-      font-size: 13px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.15s;
-      white-space: nowrap;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg,#2563eb,#1d4ed8);
-      color: white;
-      box-shadow: 0 8px 25px rgba(37,99,235,0.45);
-    }
-    .btn-outline {
-      background: rgba(255,255,255,0.8);
-      border: 1px solid var(--border);
-      color: var(--text-main);
-    }
-    .btn-primary:hover {
-      filter: brightness(1.05);
-      transform: translateY(-1px);
-    }
-    .btn-outline:hover {
-      background: white;
-    }
+/* ── TABS ── */
+.tabs{display:flex;gap:2px;background:#f1f5f9;padding:3px;border-radius:8px;width:fit-content;border:1px solid #e2e8f0;margin-bottom:18px}
+.tab{padding:6px 16px;border-radius:6px;font-size:12px;font-weight:600;color:#64748b;cursor:pointer;transition:.12s}
+.tab.on{background:#fff;color:#0071c6;box-shadow:0 1px 3px rgba(0,0,0,.07)}
 
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(260px, 320px) minmax(0, 1.7fr) minmax(260px, 0.9fr);
-      gap: 12px;
-      align-items: stretch;
-      height: calc(100vh - 60px);
-      max-height: calc(100vh - 60px);
-    }
+/* ── EMPTY ── */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 20px;gap:8px}
+.e-ico{font-size:40px;opacity:.2;margin-bottom:4px}
+.e-tit{font-size:14px;font-weight:600;color:#64748b}
+.e-sub{font-size:12px;color:#94a3b8;text-align:center;max-width:240px;line-height:1.6}
 
-    .panel {
-      background: rgba(248,250,252,0.9);
-      border-radius: 18px;
-      padding: 10px 10px 12px;
-      box-shadow: var(--shadow-soft);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(226,232,240,0.8);
-      overflow: hidden;
-      min-height: 0;
-    }
+/* ── AI PANEL ── */
+.ai-p{background:#fff;border:1px solid #e2e8f0;border-radius:12px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.ai-h{padding:11px 14px;border-bottom:1px solid #f1f5f9;background:linear-gradient(to right,#eff6ff,#f5f3ff);display:flex;align-items:center;gap:8px}
+.ai-dk{width:8px;height:8px;border-radius:50%;background:#10b981;animation:pu 1.8s ease infinite;flex-shrink:0}
+@keyframes pu{0%,100%{opacity:1}50%{opacity:.4}}
+.ai-tl{font-size:13px;font-weight:700;color:#1e293b;flex:1}
+.ai-bd{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:#f0fdf4;color:#059669;border:1px solid #bbf7d0}
+.ai-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;min-height:180px;max-height:300px}
+.ai-m{border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.7;border-left:3px solid}
+.ai-m.s{background:#eff6ff;border-color:#0071c6;color:#334155}
+.ai-m.b{background:#f0fdf4;border-color:#059669;color:#1e293b}
+.ai-m.u{background:#f1f5f9;border-color:#cbd5e1;color:#334155;margin-left:20px}
+.ai-fr{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:#94a3b8;margin-bottom:4px}
+.ai-ty{display:flex;gap:4px;align-items:center}
+.ai-ty span{width:5px;height:5px;border-radius:50%;background:#059669;animation:pu .8s ease infinite}
+.ai-ty span:nth-child(2){animation-delay:.15s}.ai-ty span:nth-child(3){animation-delay:.3s}
+.ai-row{padding:8px 10px;border-top:1px solid #f1f5f9;display:flex;gap:7px}
+.ai-inp{flex:1;font-size:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:7px 11px;font-family:inherit}
+.ai-inp:focus{outline:none;border-color:#0071c6;box-shadow:0 0 0 3px rgba(0,113,198,.1);background:#fff}
+.ai-send{width:34px;height:34px;border-radius:8px;background:#0071c6;color:#fff;border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:.12s;flex-shrink:0}
+.ai-send:hover:not(:disabled){background:#005aa0}
+.ai-send:disabled{opacity:.4;cursor:not-allowed}
 
-    .panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      padding-bottom: 4px;
-      border-bottom: 1px solid #e5e7eb;
-    }
-    .panel-title {
-      font-size: 14px;
-      font-weight: 600;
-    }
-    .panel-subtitle {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
+/* ── MISC ── */
+.stg{border-radius:8px;padding:14px;border:1px solid;margin-bottom:10px}
+.stg-b{background:rgba(0,113,198,.03);border-color:#bfdbfe}
+.stg-g{background:rgba(5,150,105,.03);border-color:#bbf7d0}
+.stg-a{background:rgba(217,119,6,.03);border-color:#fde68a}
+.vas{display:flex;align-items:center;gap:10px;background:#eff6ff;border-radius:8px;padding:8px 14px;border:1px solid #bfdbfe}
+.vas input[type=range]{flex:1;accent-color:#0071c6}
+.vas-n{font-size:24px;font-weight:800;color:#0071c6;min-width:28px;text-align:center;line-height:1}
+.sgr{display:grid;gap:1px;background:#e2e8f0}
+.sgh{background:#f8fafc;padding:8px 4px;text-align:center;font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:1px}
+.sgh.td{background:#eff6ff;color:#0071c6}
+.sgt{background:#fff;padding:6px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;font-family:monospace;min-height:52px}
+.sgc{background:#fff;padding:4px;min-height:52px}
+.apt{font-size:10px;border-radius:6px;padding:5px 7px;margin-bottom:3px;border-left:3px solid;cursor:pointer}
+.bch{display:flex;flex-direction:column;gap:10px}
+.bcr{display:flex;align-items:center;gap:10px}
+.bcl{font-size:11px;color:#475569;width:86px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bct{flex:1;height:6px;background:#f1f5f9;border-radius:6px;overflow:hidden}
+.bcf{height:100%;border-radius:6px;background:linear-gradient(90deg,#0071c6,#818cf8);transition:width .8s ease}
+.bcv{font-size:11px;font-weight:700;color:#475569;min-width:18px;text-align:right}
+.ptb{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:12px;background:linear-gradient(to right,#eff6ff,#f5f3ff);border:1px solid #bfdbfe;margin-bottom:16px}
+.ckr{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc;cursor:pointer;margin-bottom:6px;font-size:13px;transition:.12s}
+.ckr:hover{border-color:#bfdbfe;background:#eff6ff}
+.ckr input{accent-color:#0071c6;width:14px;height:14px;flex-shrink:0}
+.ti{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:8px;border:1px solid #e2e8f0;cursor:pointer;margin-bottom:6px;transition:.12s}
+.ti:hover{background:#f8fafc}
+.ti.on{border-color:#0071c6;background:#eff6ff}
+.gm{display:grid;grid-template-columns:1fr 300px;gap:16px}
+.usr{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:8px}
+.tc{position:fixed;bottom:20px;right:20px;z-index:300;display:flex;flex-direction:column;gap:8px}
+.toast{background:#fff;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.12);border:1px solid #e2e8f0;padding:12px 16px;font-size:13px;font-weight:600;color:#1e293b;display:flex;align-items:center;gap:10px;animation:fadein .2s ease;max-width:340px;border-left:4px solid #0071c6}
+.toast.ok{border-left-color:#059669}.toast.err{border-left-color:#dc2626}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scalein{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+</style>
 
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-bottom: 4px;
-    }
-    .chip {
-      padding: 3px 7px;
-      border-radius: 999px;
-      background: #e5e7eb;
-      font-size: 11px;
-      color: #4b5563;
-    }
-
-    .chip.green {
-      background: #dcfce7;
-      color: #166534;
-    }
-    .chip.blue {
-      background: #dbeafe;
-      color: #1d4ed8;
-    }
-
-    .search-input {
-      width: 100%;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      padding: 6px 10px;
-      font-size: 13px;
-      outline: none;
-      background: rgba(255,255,255,0.95);
-    }
-
-    .list {
-      flex: 1;
-      overflow: auto;
-      padding-right: 4px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .patient-card {
-      border-radius: 12px;
-      padding: 8px;
-      background: white;
-      border: 1px solid #e5e7eb;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      transition: all 0.15s ease;
-    }
-    .patient-card:hover {
-      box-shadow: 0 10px 20px rgba(148,163,184,0.25);
-      transform: translateY(-1px);
-    }
-    .patient-card.active {
-      border-color: #2563eb;
-      background: #eff6ff;
-    }
-    .patient-name {
-      font-size: 13px;
-      font-weight: 600;
-    }
-    .patient-meta {
-      font-size: 11px;
-      color: var(--text-muted);
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .scroll {
-      overflow: auto;
-      padding-right: 4px;
-      flex: 1;
-    }
-
-    .section {
-      margin-bottom: 8px;
-    }
-    .section-title {
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .section-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(130px,1fr));
-      gap: 4px;
-    }
-
-    .field-row {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      font-size: 12px;
-    }
-    .field-label {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-    .field-value {
-      font-size: 12px;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 6px;
-      flex-wrap: wrap;
-    }
-    .tab {
-      font-size: 11px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px solid #e5e7eb;
-      background: #f9fafb;
-      cursor: pointer;
-    }
-    .tab.active {
-      background: #2563eb;
-      color: white;
-      border-color: #1d4ed8;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 3px 7px;
-      border-radius: 999px;
-      font-size: 11px;
-      background: #e5e7eb;
-      color: #4b5563;
-    }
-    .badge.ai {
-      background: #ecfeff;
-      color: #0891b2;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 80px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      padding: 6px 8px;
-      font-size: 12px;
-      resize: vertical;
-      outline: none;
-      background: rgba(255,255,255,0.95);
-    }
-
-    .ai-output {
-      font-size: 12px;
-      background: radial-gradient(circle at top,#eff6ff,#f9fafb);
-      border-radius: 12px;
-      padding: 8px;
-      border: 1px dashed #bfdbfe;
-      max-height: 180px;
-      overflow: auto;
-      white-space: pre-wrap;
-    }
-
-    .small-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 11px;
-    }
-    .small-table th,
-    .small-table td {
-      border-bottom: 1px solid #e5e7eb;
-      padding: 3px 4px;
-      text-align: left;
-    }
-    .small-table th {
-      font-weight: 600;
-      background: #edf2ff;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-
-    @media (max-width: 1100px) {
-      .layout {
-        grid-template-columns: 1fr;
-        height: auto;
-        max-height: none;
-      }
-    }
-
-    @media (max-width: 800px) {
-      body {
-        flex-direction: column;
-      }
-      .sidebar {
-        width: 100%;
-        flex-direction: row;
-        align-items: center;
-        overflow-x: auto;
-      }
-      .role-select,
-      .nav-section-title,
-      .nav,
-      .sidebar-footer {
-        display: none;
-      }
-      .logo {
-        margin-bottom: 0;
-      }
-      .main {
-        padding: 10px;
-      }
-    }
-  </style>
 </head>
 <body>
-  <aside class="sidebar">
-    <div class="logo">
-      <div class="logo-badge">AI</div>
-      <div class="logo-text">
-        <span>OrthoMIS</span>
-        <span>ортопедия • УЗИ • подология</span>
+
+<!-- ════════ LOGIN SCREEN ════════ -->
+
+<div id="screen-login">
+  <div class="l-orb1"></div>
+  <div class="l-orb2"></div>
+  <div class="l-grid"></div>
+  <div class="l-card">
+    <div class="l-logo">
+      <div class="l-mark">⚕</div>
+      <div>
+        <div class="l-name">АльтернативА</div>
+        <div class="l-sub">МИС Клиники</div>
       </div>
     </div>
-
-    <div class="role-select">
-      <label for="role">Роль в системе</label>
-      <select id="role">
-        <option value="orthopedist">Врач-ортопед</option>
-        <option value="usg">Врач УЗИ</option>
-        <option value="podiatrist">Подолог</option>
-        <option value="nurse">Медсестра</option>
-        <option value="receptionist">Регистратор</option>
-        <option value="director">Директор клиники</option>
-        <option value="admin">Администратор системы</option>
-      </select>
+    <div class="l-box">
+      <span class="l-lbl" style="margin-bottom:10px">Выберите роль</span>
+      <div class="l-roles">
+        <div class="l-role on" id="role-director" onclick="setRole('director')">
+          <div class="ico">👑</div><div class="lbl">Руководитель</div>
+        </div>
+        <div class="l-role" id="role-doctor" onclick="setRole('doctor')">
+          <div class="ico">🩺</div><div class="lbl">Врач</div>
+        </div>
+        <div class="l-role" id="role-admin" onclick="setRole('admin')">
+          <div class="ico">📋</div><div class="lbl">Администратор</div>
+        </div>
+      </div>
+      <div class="l-err" id="l-err">⚠ Неверный логин или пароль</div>
+      <span class="l-lbl">Логин</span>
+      <input type="text" class="l-inp" id="f-login" placeholder="director / doctor / admin">
+      <span class="l-lbl">Пароль</span>
+      <input type="password" class="l-inp" id="f-pass" placeholder="Введите пароль (1234)">
+      <button class="l-btn" id="btn-login" onclick="doLogin()">Войти в систему →</button>
+      <div class="l-hint">Аккаунты: <b>director</b> · <b>doctor</b> · <b>admin</b><br>Пароль для всех: <b>1234</b></div>
     </div>
+  </div>
+</div>
 
-    <div>
-      <div class="nav-section-title">Навигация</div>
-      <div class="nav">
-        <button class="active" data-section="patients">
-          <span class="icon">👥</span> Пациенты
-        </button>
-        <button data-section="visits">
-          <span class="icon">📋</span> Приёмы и протоколы
-        </button>
-        <button data-section="ultrasound">
-          <span class="icon">🩻</span> УЗИ суставов
-        </button>
-        <button data-section="regen">
-          <span class="icon">💉</span> Регенеративная терапия
-        </button>
-        <button data-section="podiatry">
-          <span class="icon">🦶</span> Подология
-        </button>
-        <button data-section="analytics">
-          <span class="icon">📊</span> Аналитика
-        </button>
+<!-- ════════ APP SCREEN ════════ -->
+
+<div id="screen-app">
+  <!-- SIDEBAR -->
+  <div id="sb">
+    <div class="sb-head">
+      <div class="sb-mark">⚕</div>
+      <span class="sb-title">АльтернативА</span>
+    </div>
+    <div id="sb-nav"></div>
+    <div class="sb-foot">
+      <div class="sb-user">
+        <div class="av av-s" id="sb-av">—</div>
+        <div>
+          <div class="sb-uname" id="sb-uname">—</div>
+          <div class="sb-urole" id="sb-urole">—</div>
+        </div>
+        <div class="sb-dot"></div>
       </div>
     </div>
-
-    <div>
-      <div class="nav-section-title">AI-модуль</div>
-      <div class="nav">
-        <button data-section="ai">
-          <span class="icon">⚡</span> AI-помощник
-        </button>
+  </div>
+  <!-- MAIN -->
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0">
+    <div id="tb">
+      <div class="tb-search">
+        <span style="color:#94a3b8;font-size:14px">🔍</span>
+        <input type="text" placeholder="Поиск пациента...">
+      </div>
+      <div style="flex:1"></div>
+      <span class="tb-badge" id="tb-badge">—</span>
+      <div class="tb-ico">🔔<div class="tb-nd"></div></div>
+      <div class="tb-user">
+        <div class="av av-s" id="tb-av">—</div>
+        <span class="tb-uname" id="tb-uname">—</span>
+        <button class="tb-out" onclick="doLogout()">⎋ Выйти</button>
       </div>
     </div>
-
-    <div class="sidebar-footer">
-      Версия демо (только фронтенд, данные в памяти).  
-      Для реальной МИС нужен сервер, БД и защита медданных.
+    <div id="content">
+      <div class="page" id="p-dash"></div>
+      <div class="page" id="p-sched"></div>
+      <div class="page" id="p-pts"></div>
+      <div class="page" id="p-emr"></div>
+      <div class="page" id="p-prp"></div>
+      <div class="page" id="p-uzi"></div>
+      <div class="page" id="p-pod"></div>
+      <div class="page" id="p-rehab"></div>
+      <div class="page" id="p-crm"></div>
+      <div class="page" id="p-tpl"></div>
+      <div class="page" id="p-docs"></div>
+      <div class="page" id="p-ana"></div>
+      <div class="page" id="p-stock"></div>
+      <div class="page" id="p-users"></div>
     </div>
-  </aside>
+  </div>
+</div>
 
-  <main class="main">
-    <header class="topbar">
-      <div class="topbar-left">
-        <div class="topbar-title" id="topbar-title">Пациенты</div>
-        <div class="topbar-sub" id="topbar-sub">Электронные медицинские карты, визиты и протоколы</div>
-      </div>
-      <div class="topbar-actions">
-        <button class="btn btn-outline" id="btn-new-patient">+ Новый пациент</button>
-        <button class="btn btn-primary" id="btn-ai-summary">
-          ⚡ AI-резюме случая
-        </button>
-      </div>
-    </header>
+<!-- MODALS -->
 
-    <section class="layout">
-      <!-- ЛЕВАЯ ПАНЕЛЬ: список пациентов / визитов -->
-      <section class="panel" id="left-panel">
-        <div class="panel-header">
-          <div>
-            <div class="panel-title" id="left-title">Пациенты</div>
-            <div class="panel-subtitle" id="left-subtitle">Быстрый доступ к ЭМК</div>
-          </div>
-        </div>
-        <input class="search-input" id="search" placeholder="Поиск по ФИО / телефону" />
+<div class="overlay" id="m-ptadd"><div class="modal m-lg"><div class="m-head"><div class="m-tit">➕ Новый пациент</div><button class="m-x" onclick="closeModal('m-ptadd')">✕</button></div><div class="m-body" id="mb-ptadd"></div></div></div>
+<div class="overlay" id="m-ptedit"><div class="modal m-lg"><div class="m-head"><div class="m-tit">✏️ Редактировать</div><button class="m-x" onclick="closeModal('m-ptedit')">✕</button></div><div class="m-body" id="mb-ptedit"></div></div></div>
+<div class="overlay" id="m-ptview"><div class="modal m-md"><div class="m-head"><div class="m-tit" id="mb-ptview-t">Пациент</div><button class="m-x" onclick="closeModal('m-ptview')">✕</button></div><div class="m-body" id="mb-ptview"></div></div></div>
+<div class="overlay" id="m-vadd"><div class="modal m-md"><div class="m-head"><div class="m-tit">📅 Новый приём</div><button class="m-x" onclick="closeModal('m-vadd')">✕</button></div><div class="m-body" id="mb-vadd"></div></div></div>
+<div class="overlay" id="m-prp"><div class="modal m-lg"><div class="m-head"><div class="m-tit">💉 PRP-протокол</div><button class="m-x" onclick="closeModal('m-prp')">✕</button></div><div class="m-body" id="mb-prp"></div></div></div>
+<div class="overlay" id="m-stock"><div class="modal m-md"><div class="m-head"><div class="m-tit">📦 Приход</div><button class="m-x" onclick="closeModal('m-stock')">✕</button></div><div class="m-body" id="mb-stock"></div></div></div>
+<div class="overlay" id="m-user"><div class="modal m-md"><div class="m-head"><div class="m-tit">👤 Сотрудник</div><button class="m-x" onclick="closeModal('m-user')">✕</button></div><div class="m-body" id="mb-user"></div></div></div>
+<div class="overlay" id="m-ok"><div class="modal m-sm"><div class="m-head"><div class="m-tit" id="ok-t">Подтверждение</div><button class="m-x" onclick="closeModal('m-ok')">✕</button></div><div class="m-body" id="ok-b"></div></div></div>
 
-        <div class="chips" id="quick-filters">
-          <div class="chip blue">Ортопедия</div>
-          <div class="chip blue">УЗИ</div>
-          <div class="chip blue">Регенеративная терапия</div>
-        </div>
+<div class="tc" id="tc"></div>
 
-        <div class="list" id="list-container">
-          <!-- сюда JS рисует карточки -->
-        </div>
-      </section>
+<script>
+// ═══════════════════════════ CONSTANTS ═══════════════════════════
+var ACCOUNTS = {
+  'director': {pass:'1234', role:'director', name:'Иванов Дмитрий', ini:'ИД'},
+  'doctor':   {pass:'1234', role:'doctor',   name:'Петрова Анна',    ini:'ПА'},
+  'admin':    {pass:'1234', role:'admin',    name:'Сидорова Ольга',  ini:'СО'}
+};
 
-      <!-- ЦЕНТР: карточка пациента / контент -->
-      <section class="panel" id="center-panel">
-        <div class="panel-header">
-          <div>
-            <div class="panel-title" id="center-title">Карточка пациента</div>
-            <div class="panel-subtitle" id="center-subtitle">Профиль, диагнозы, лечение</div>
-          </div>
-        </div>
+var ROLES = {
+  'director': {lbl:'👑 Руководитель', grad:'linear-gradient(135deg,#7c3aed,#a78bfa)', cls:'bdvi'},
+  'doctor':   {lbl:'🩺 Врач',         grad:'linear-gradient(135deg,#0071c6,#36aaf5)', cls:'bdbl'},
+  'admin':    {lbl:'📋 Администратор',grad:'linear-gradient(135deg,#dc2626,#fb7185)', cls:'bdre'}
+};
 
-        <div class="scroll" id="center-content">
-          <!-- JS наполняет -->
-        </div>
-      </section>
+var PERMS = {
+  'director': ['dash','sched','pts','emr','prp','uzi','pod','rehab','crm','tpl','docs','ana','stock','users'],
+  'doctor':   ['dash','sched','pts','emr','prp','uzi','pod','rehab','crm','tpl','docs'],
+  'admin':    ['dash','sched','pts','crm','docs']
+};
 
-      <!-- ПРАВАЯ ПАНЕЛЬ: AI + доп.инфо -->
-      <section class="panel">
-        <div class="panel-header">
-          <div>
-            <div class="panel-title">AI-помощник</div>
-            <div class="panel-subtitle">Черновики заключений и планов лечения</div>
-          </div>
-          <span class="badge ai">LLM demo</span>
-        </div>
+var AI_SYS = 'Ты — медицинский AI-ассистент клиники «АльтернативА». Специализация: ортопедия, PRP-терапия, УЗД суставов, подология, реабилитация. Отвечай только на русском языке. Используй МКБ-10. Структура протоколов: Жалобы → Анамнез → Осмотр → Заключение → Рекомендации. Не ставь диагнозы самостоятельно. Упоминай противопоказания.';
 
-        <div class="section">
-          <div class="section-title">Контекст для AI</div>
-          <textarea id="ai-input" placeholder="Опишите клиническую задачу: жалобы, данные осмотра, УЗИ, желаемый документ (протокол приёма, заключение УЗИ, план PRP и т.п.)"></textarea>
-          <button class="btn btn-primary" id="btn-ai-generate" style="margin-top:4px;">Сгенерировать текст</button>
-        </div>
+var STCLS = {
+  'Активный':'bdgr','Наблюдается':'bdbl','Первичный':'bdvi',
+  'Завершил лечение':'bdam','Архив':'bdsl',
+  'В процессе':'bdam','Завершён':'bdgr',
+  'В наличии':'bdgr','Заканчивается':'bdam','Нет в наличии':'bdre'
+};
 
-        <div class="section">
-          <div class="section-title">Результат (черновик)</div>
-          <div class="ai-output" id="ai-output">
-            Введите клинические данные слева и нажмите «Сгенерировать текст», чтобы получить пример формулировки протокола или выписки.<br><br>
-            Внимание: это демо-логика в браузере без медицинской валидации. Всегда проверяйте текст вручную.
-          </div>
-        </div>
-      </section>
-    </section>
-  </main>
+var CU = null;
+var wkOff = 0;
+var curTpl = 'ortho';
+var confirmCb = null;
+var AI_SESSIONS = {};
 
-  <script>
-    // ==== DEMO-ДАННЫЕ ====
+// ═══════════════════════════ STORAGE ═══════════════════════════
+function lsGet(key, def) {
+  try {
+    var v = localStorage.getItem(key);
+    if (v !== null) return JSON.parse(v);
+    return def;
+  } catch(e) { return def; }
+}
+function lsSet(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+}
+function DB(key) { return lsGet('mis_' + key, []); }
+function DBs(key, val) { lsSet('mis_' + key, val); }
 
-    const patients = [
-      {
-        id: 1,
-        name: "Иванов Иван Петрович",
-        gender: "М",
-        age: 54,
-        phone: "+7 900 111-22-33",
-        mainDiagnosis: "Артроз коленного сустава II ст. (М17.1)",
-        city: "Краснодар",
-        tags: ["ортопедия", "регенеративная терапия"],
-        visits: [
-          {
-            id: 101,
-            date: "2026-02-12",
-            type: "ортопедия",
-            doctor: "д-р Сидоров",
-            complaint: "Боли в правом колене при ходьбе и нагрузке",
-            rom: "Сгибание 110°, разгибание 0°",
-            tests: "Лахман (-), «передний ящик» (-), МакМюррей (+ медиально, боль)",
-            vas: "VAS 6/10 при ходьбе",
-            plan: "Курс PRP 3 инъекции в правое колено под УЗ-контролем, НПВС коротким курсом",
-          },
-          {
-            id: 102,
-            date: "2026-03-05",
-            type: "УЗИ",
-            doctor: "д-р Кузнецова",
-            complaint: "Контроль состояния хряща и выпота",
-            usgConclusion: "Признаки дегенерации медиального мыщелка бедренной кости, умеренный синовит, выпот до 6 мм.",
-          },
-        ],
-        regen: [
-          {
-            id: 201,
-            date: "2026-02-20",
-            modality: "PRP",
-            joint: "Правое колено",
-            protocol: "Забор 60 мл, двойное центрифугирование, объём введения 6 мл, 1 сессия из 3",
-            batch: "PRP-SET-2026-02-01",
-          },
-        ],
-        podology: [],
-        usg: [
-          {
-            id: 301,
-            date: "2026-03-05",
-            region: "Правое колено",
-            conclusion: "Умеренный выпот, дегенеративные изменения медиального мениска",
-          },
-        ],
-      },
-      {
-        id: 2,
-        name: "Петрова Анна Сергеевна",
-        gender: "Ж",
-        age: 37,
-        phone: "+7 900 222-33-44",
-        mainDiagnosis: "Импинджмент-синдром правого плеча (M75.4)",
-        city: "Краснодар",
-        tags: ["ортопедия", "УЗИ"],
-        visits: [
-          {
-            id: 103,
-            date: "2026-02-28",
-            type: "ортопедия",
-            doctor: "д-р Сидоров",
-            complaint: "Боль в правом плече при отведении руки",
-            rom: "Отведение 150°, наружная ротация ограничена",
-            tests: "Jobe (+), Hawkins-Kennedy (+), Neer (+)",
-            vas: "VAS 5/10 при отведении",
-            plan: "Субакромиальное введение PRP, курс ЛФК и физиотерапии",
-          },
-        ],
-        regen: [],
-        podology: [],
-        usg: [
-          {
-            id: 302,
-            date: "2026-03-01",
-            region: "Правое плечо",
-            conclusion: "Признаки тендинопатии надостной мышцы, бурсит субакромиальной сумки.",
-          },
-        ],
-      },
-      {
-        id: 3,
-        name: "Кузнецов Сергей Олегович",
-        gender: "М",
-        age: 62,
-        phone: "+7 900 333-44-55",
-        mainDiagnosis: "Артроз тазобедренного сустава III ст. (M16.1)",
-        city: "Краснодар",
-        tags: ["ортопедия", "подология", "реабилитация"],
-        visits: [],
-        regen: [],
-        podology: [
-          {
-            id: 401,
-            date: "2026-01-20",
-            type: "Коррекция вросшего ногтя",
-            description: "Пластика латерального ногтевого валика, установка скобы",
-            status: "Заживает, без признаков инфекции",
-          },
-        ],
-        usg: [],
-      },
-    ];
+// ═══════════════════════════ UTILS ═══════════════════════════
+function uid(p) { return (p||'x') + '_' + Date.now() + '_' + Math.random().toString(36).slice(2,6); }
+function today() { return new Date().toISOString().split('T')[0]; }
+function fmtD(d) {
+  if (!d) return '—';
+  try { return new Date(d + 'T12:00').toLocaleDateString('ru-RU', {day:'numeric',month:'short',year:'numeric'}); }
+  catch(e) { return d; }
+}
+function calcAge(dob) {
+  if (!dob) return null;
+  try {
+    var d = new Date(dob + 'T12:00'), n = new Date();
+    var a = n.getFullYear() - d.getFullYear();
+    if (n < new Date(n.getFullYear(), d.getMonth(), d.getDate())) a--;
+    return a;
+  } catch(e) { return null; }
+}
+function getIni(name) {
+  if (!name) return '?';
+  var p = name.trim().split(' ');
+  return (p.length >= 2 ? p[0][0] + p[1][0] : name.substring(0,2)).toUpperCase();
+}
+var GRADS = [
+  'linear-gradient(135deg,#0071c6,#36aaf5)',
+  'linear-gradient(135deg,#7c3aed,#a78bfa)',
+  'linear-gradient(135deg,#059669,#34d399)',
+  'linear-gradient(135deg,#d97706,#fbbf24)',
+  'linear-gradient(135deg,#dc2626,#fb7185)'
+];
+function ptGrad(id) { return GRADS[parseInt((id||'0').replace(/\D/g,''), 10) % GRADS.length]; }
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function sbadge(s) { return '<span class="badge ' + (STCLS[s]||'bdsl') + '">' + esc(s||'—') + '</span>'; }
 
-    let currentSection = "patients";
-    let currentPatientId = patients[0].id;
+// ═══════════════════════════ TOAST ═══════════════════════════
+function toast(msg, type) {
+  var c = document.getElementById('tc');
+  var d = document.createElement('div');
+  d.className = 'toast' + (type ? ' ' + type : '');
+  d.textContent = msg;
+  c.appendChild(d);
+  setTimeout(function() {
+    d.style.cssText = 'opacity:0;transform:translateX(8px);transition:all .3s';
+    setTimeout(function() { d.parentNode && d.parentNode.removeChild(d); }, 300);
+  }, 2800);
+}
 
-    const sectionConfig = {
-      patients: {
-        topTitle: "Пациенты",
-        topSub: "Электронные карты, контакты, основные диагнозы",
-        leftTitle: "Пациенты",
-        leftSub: "Список пациентов",
-      },
-      visits: {
-        topTitle: "Приёмы и протоколы",
-        topSub: "Ортопедические осмотры, ROM, тесты, планы лечения",
-        leftTitle: "Приёмы",
-        leftSub: "Визиты по выбранному пациенту",
-      },
-      ultrasound: {
-        topTitle: "УЗИ суставов",
-        topSub: "Протоколы УЗИ и заключения",
-        leftTitle: "Исследования УЗИ",
-        leftSub: "Список УЗИ выбранного пациента",
-      },
-      regen: {
-        topTitle: "Регенеративная медицина",
-        topSub: "PRP, BMAC, ГК, протоколы и курсы",
-        leftTitle: "Процедуры",
-        leftSub: "Регенеративные процедуры",
-      },
-      podiology: {
-        topTitle: "Подология",
-        topSub: "Вросший ноготь, пластика валика, экзостоз",
-        leftTitle: "Подологические случаи",
-        leftSub: "Процедуры по стопам",
-      },
-      analytics: {
-        topTitle: "Аналитика",
-        topSub: "Наглядные показатели эффективности клиники (демо)",
-        leftTitle: "Сводка",
-        leftSub: "Пациенты и процедуры",
-      },
-      ai: {
-        topTitle: "AI-помощник",
-        topSub: "Генерация текстов протоколов и планов (демо)",
-        leftTitle: "Контекст",
-        leftSub: "Примеры запросов",
-      },
-    };
+// ═══════════════════════════ MODALS ═══════════════════════════
+function openModal(id) { var el = document.getElementById(id); if (el) el.classList.add('open'); }
+function closeModal(id) { var el = document.getElementById(id); if (el) el.classList.remove('open'); }
+function confirm2(title, msg, cb) {
+  document.getElementById('ok-t').textContent = title;
+  document.getElementById('ok-b').innerHTML = '<div class="al al-r">⚠️ ' + msg + '</div>' +
+    '<div class="m-foot">' +
+    '<button class="btn btn-s b-md" onclick="closeModal(\'m-ok\')">Отмена</button>' +
+    '<button class="btn btn-d b-md" onclick="if(window._confirmCb){window._confirmCb();}closeModal(\'m-ok\')">Удалить</button>' +
+    '</div>';
+  window._confirmCb = cb;
+  openModal('m-ok');
+}
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('overlay')) e.target.classList.remove('open');
+});
 
-    const elTopbarTitle = document.getElementById("topbar-title");
-    const elTopbarSub = document.getElementById("topbar-sub");
-    const elLeftTitle = document.getElementById("left-title");
-    const elLeftSubtitle = document.getElementById("left-subtitle");
-    const elListContainer = document.getElementById("list-container");
-    const elCenterContent = document.getElementById("center-content");
-    const elSearch = document.getElementById("search");
-    const roleSelect = document.getElementById("role");
+// ═══════════════════════════ LOGIN ═══════════════════════════
+function setRole(role) {
+  var roles = ['director', 'doctor', 'admin'];
+  for (var i = 0; i < roles.length; i++) {
+    var el = document.getElementById('role-' + roles[i]);
+    if (el) el.classList.remove('on');
+  }
+  var sel = document.getElementById('role-' + role);
+  if (sel) sel.classList.add('on');
+  var inp = document.getElementById('f-login');
+  if (inp) inp.value = role;
+}
 
-    function setSection(section) {
-      currentSection = section;
-      document.querySelectorAll(".nav button").forEach((btn) => {
-        btn.classList.toggle("active", btn.dataset.section === section);
-      });
-      const cfg = sectionConfig[section] || sectionConfig["patients"];
-      elTopbarTitle.textContent = cfg.topTitle;
-      elTopbarSub.textContent = cfg.topSub;
-      elLeftTitle.textContent = cfg.leftTitle;
-      elLeftSubtitle.textContent = cfg.leftSub;
+function doLogin() {
+  var loginEl = document.getElementById('f-login');
+  var passEl = document.getElementById('f-pass');
+  var errEl = document.getElementById('l-err');
+  var btnEl = document.getElementById('btn-login');
 
-      renderLeftList();
-      renderCenter();
+  if (!loginEl || !passEl) return;
+
+  var u = loginEl.value.trim().toLowerCase();
+  var p = passEl.value;
+
+  if (errEl) errEl.classList.remove('show');
+
+  if (!u || !p) {
+    if (errEl) errEl.classList.add('show');
+    return;
+  }
+
+  // Check accounts - first built-in, then localStorage
+  var acc = ACCOUNTS[u] || null;
+  try {
+    var extra = lsGet('mis_accs', null);
+    if (extra && extra[u]) acc = extra[u];
+  } catch(e) {}
+
+  if (!acc || acc.pass !== p) {
+    if (errEl) errEl.classList.add('show');
+    return;
+  }
+
+  // Login successful
+  var rc = ROLES[acc.role] || ROLES['doctor'];
+  CU = {
+    login: u,
+    name: acc.name || u,
+    role: acc.role || 'doctor',
+    ini: acc.ini || getIni(acc.name || u),
+    label: rc.lbl,
+    grad: rc.grad,
+    cls: rc.cls
+  };
+
+  document.getElementById('screen-login').classList.add('hidden');
+  document.getElementById('screen-app').classList.add('visible');
+
+  startApp();
+}
+
+function doLogout() {
+  CU = null;
+  document.getElementById('screen-app').classList.remove('visible');
+  document.getElementById('screen-login').classList.remove('hidden');
+  var p = document.getElementById('f-pass');
+  if (p) p.value = '';
+}
+
+// Enter key on password field
+document.getElementById('f-pass').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doLogin();
+});
+
+// ═══════════════════════════ APP START ═══════════════════════════
+function startApp() {
+  var rc = ROLES[CU.role] || ROLES['doctor'];
+
+  var sbAv = document.getElementById('sb-av');
+  if (sbAv) { sbAv.style.background = CU.grad; sbAv.textContent = CU.ini; }
+
+  var tbAv = document.getElementById('tb-av');
+  if (tbAv) { tbAv.style.background = CU.grad; tbAv.textContent = CU.ini; }
+
+  var sbUname = document.getElementById('sb-uname');
+  if (sbUname) sbUname.textContent = CU.name;
+
+  var sbUrole = document.getElementById('sb-urole');
+  if (sbUrole) sbUrole.textContent = rc.lbl;
+
+  var tbUname = document.getElementById('tb-uname');
+  if (tbUname) tbUname.textContent = CU.name;
+
+  var tbBadge = document.getElementById('tb-badge');
+  if (tbBadge) { tbBadge.className = 'tb-badge badge ' + CU.cls; tbBadge.textContent = rc.lbl; }
+
+  buildNav();
+  goTo('dash');
+}
+
+// ═══════════════════════════ NAVIGATION ═══════════════════════════
+var NAV_ITEMS = [
+  {g:'Главная', items:[{id:'dash',ico:'📊',l:'Дашборд'},{id:'sched',ico:'📅',l:'Расписание'}]},
+  {g:'Пациенты', items:[{id:'pts',ico:'👥',l:'База пациентов'},{id:'emr',ico:'📋',l:'Приём / ЭМК'},{id:'rehab',ico:'🏃',l:'Реабилитация'}]},
+  {g:'Процедуры', items:[{id:'prp',ico:'💉',l:'PRP-терапия'},{id:'uzi',ico:'🔬',l:'УЗИ суставов'},{id:'pod',ico:'🦶',l:'Подология'}]},
+  {g:'Управление', items:[{id:'crm',ico:'💬',l:'CRM'},{id:'tpl',ico:'📄',l:'Шаблоны'},{id:'docs',ico:'📁',l:'Документы'},{id:'ana',ico:'📈',l:'Аналитика'},{id:'stock',ico:'📦',l:'Склад'},{id:'users',ico:'👤',l:'Пользователи'}]}
+];
+
+function canAccess(id) { return CU && (PERMS[CU.role]||[]).indexOf(id) >= 0; }
+
+function buildNav() {
+  var pts = DB('pts'), vis = DB('vis');
+  var tCnt = 0;
+  var t = today();
+  for (var i = 0; i < vis.length; i++) { if (vis[i].date === t) tCnt++; }
+  var html = '';
+  for (var gi = 0; gi < NAV_ITEMS.length; gi++) {
+    var g = NAV_ITEMS[gi];
+    html += '<div class="sb-section"><span class="sb-sec-lbl">' + g.g + '</span>';
+    for (var ii = 0; ii < g.items.length; ii++) {
+      var item = g.items[ii];
+      var locked = !canAccess(item.id);
+      var cnt = item.id === 'pts' ? pts.length : item.id === 'sched' ? tCnt : -1;
+      html += '<div class="sb-item' + (locked?' off':'') + '" id="n-'+item.id+'" onclick="goTo(\''+item.id+'\')">' +
+        '<span class="sb-ico">'+item.ico+'</span>' +
+        '<span class="sb-lbl">'+item.l+'</span>' +
+        (cnt >= 0 ? '<span class="sb-cnt'+(cnt===0?' zero':'')+'">'+cnt+'</span>' : '') +
+        '</div>';
     }
+    html += '</div>';
+  }
+  document.getElementById('sb-nav').innerHTML = html;
+}
 
-    function getCurrentPatient() {
-      return patients.find((p) => p.id === currentPatientId) || patients[0];
+function goTo(id) {
+  var pages = document.querySelectorAll('.page');
+  for (var i = 0; i < pages.length; i++) pages[i].classList.remove('on');
+  var navs = document.querySelectorAll('.sb-item');
+  for (var i = 0; i < navs.length; i++) navs[i].classList.remove('on');
+
+  var pg = document.getElementById('p-' + id);
+  var ni = document.getElementById('n-' + id);
+  if (pg) pg.classList.add('on');
+  if (ni) ni.classList.add('on');
+
+  if (!canAccess(id)) {
+    if (pg) pg.innerHTML = '<div class="empty"><div class="e-ico">🔒</div><div class="e-tit">Доступ ограничен</div><div class="e-sub">Раздел недоступен для вашей роли</div></div>';
+    return;
+  }
+
+  var fns = {dash:rDash,sched:rSched,pts:rPts,emr:rEMR,prp:rPRP,uzi:rUZI,pod:rPod,rehab:rRehab,crm:rCRM,tpl:rTpl,docs:rDocs,ana:rAna,stock:rStock,users:rUsers};
+  if (fns[id]) {
+    try { fns[id](); }
+    catch(e) {
+      if (pg) pg.innerHTML = '<div class="empty"><div class="e-ico">⚠️</div><div class="e-tit">Ошибка раздела</div><div class="e-sub">' + esc(e.message) + '</div></div>';
     }
+  }
+}
 
-    // ==== РЕНДЕР ЛЕВОЙ ПАНЕЛИ ====
+// ═══════════════════════════ HELPERS ═══════════════════════════
+function ptOpts(sel) {
+  var pts = DB('pts');
+  var html = '<option value="">— Выберите пациента —</option>';
+  for (var i = 0; i < pts.length; i++) {
+    var p = pts[i];
+    html += '<option value="' + p.id + '"' + (p.id === sel ? ' selected' : '') + '>' + esc(p.fam + ' ' + p.nam) + '</option>';
+  }
+  return html;
+}
 
-    function renderLeftList() {
-      elListContainer.innerHTML = "";
-      const patient = getCurrentPatient();
+function barChart(data) {
+  if (!data || Object.keys(data).length === 0) return '<div class="empty" style="padding:24px"><div class="e-ico">📊</div><div class="e-tit">Нет данных</div></div>';
+  var entries = Object.entries(data).sort(function(a,b){return b[1]-a[1]}).slice(0,7);
+  var max = Math.max.apply(null, entries.map(function(e){return e[1]}));
+  var html = '<div class="bch">';
+  for (var i = 0; i < entries.length; i++) {
+    var l = entries[i][0], v = entries[i][1];
+    html += '<div class="bcr"><div class="bcl" title="'+esc(l)+'">'+esc(l)+'</div><div class="bct"><div class="bcf" style="width:'+Math.round(v/max*100)+'%"></div></div><div class="bcv">'+v+'</div></div>';
+  }
+  return html + '</div>';
+}
 
-      if (currentSection === "patients" || currentSection === "ai") {
-        const query = elSearch.value?.toLowerCase() || "";
-        patients
-          .filter((p) => {
-            if (!query) return true;
-            return (
-              p.name.toLowerCase().includes(query) ||
-              (p.phone && p.phone.includes(query))
-            );
-          })
-          .forEach((p) => {
-            const card = document.createElement("div");
-            card.className = "patient-card" + (p.id === currentPatientId ? " active" : "");
-            card.onclick = () => {
-              currentPatientId = p.id;
-              renderLeftList();
-              renderCenter();
-            };
-            card.innerHTML = `
-              <div class="patient-name">${p.name}</div>
-              <div class="patient-meta">
-                <span>${p.gender}, ${p.age} лет</span>
-                <span>${p.city}</span>
-              </div>
-              <div class="patient-meta">
-                <span>${p.mainDiagnosis}</span>
-              </div>
-            `;
-            elListContainer.appendChild(card);
-          });
-      } else if (currentSection === "visits") {
-        if (!patient.visits || !patient.visits.length) {
-          elListContainer.innerHTML =
-            '<div class="panel-subtitle">Нет визитов для этого пациента</div>';
-          return;
-        }
-        patient.visits.forEach((v) => {
-          const card = document.createElement("div");
-          card.className = "patient-card";
-          card.innerHTML = `
-            <div class="patient-name">${v.date} — ${v.type}</div>
-            <div class="patient-meta">
-              <span>${v.doctor || "врач не указан"}</span>
-            </div>
-            <div class="patient-meta">
-              <span>${v.complaint || ""}</span>
-            </div>
-          `;
-          elListContainer.appendChild(card);
-        });
-      } else if (currentSection === "ultrasound") {
-        if (!patient.usg || !patient.usg.length) {
-          elListContainer.innerHTML =
-            '<div class="panel-subtitle">Нет УЗИ-исследований для этого пациента</div>';
-          return;
-        }
-        patient.usg.forEach((u) => {
-          const card = document.createElement("div");
-          card.className = "patient-card";
-          card.innerHTML = `
-            <div class="patient-name">${u.date} — ${u.region}</div>
-            <div class="patient-meta">
-              <span>${u.conclusion.slice(0, 70)}...</span>
-            </div>
-          `;
-          elListContainer.appendChild(card);
-        });
-      } else if (currentSection === "regen") {
-        if (!patient.regen || !patient.regen.length) {
-          elListContainer.innerHTML =
-            '<div class="panel-subtitle">Нет регенеративных процедур</div>';
-          return;
-        }
-        patient.regen.forEach((r) => {
-          const card = document.createElement("div");
-          card.className = "patient-card";
-          card.innerHTML = `
-            <div class="patient-name">${r.date} — ${r.modality}</div>
-            <div class="patient-meta">
-              <span>${r.joint}</span>
-            </div>
-          `;
-          elListContainer.appendChild(card);
-        });
-      } else if (currentSection === "podiology") {
-        if (!patient.podology || !patient.podology.length) {
-          elListContainer.innerHTML =
-            '<div class="panel-subtitle">Нет подологических случаев</div>';
-          return;
-        }
-        patient.podology.forEach((podo) => {
-          const card = document.createElement("div");
-          card.className = "patient-card";
-          card.innerHTML = `
-            <div class="patient-name">${podo.date} — ${podo.type}</div>
-            <div class="patient-meta">
-              <span>${podo.status}</span>
-            </div>
-          `;
-          elListContainer.appendChild(card);
-        });
-      } else if (currentSection === "analytics") {
-        const totalPatients = patients.length;
-        const totalRegen = patients.reduce(
-          (acc, p) => acc + (p.regen?.length || 0),
-          0
-        );
-        const totalUSG = patients.reduce((acc, p) => acc + (p.usg?.length || 0), 0);
+function ptBanner(p) {
+  if (!p) return '';
+  var full = p.fam + ' ' + p.nam + (p.pat ? ' ' + p.pat : '');
+  return '<div class="ptb">' +
+    '<div class="av av-l" style="background:'+ptGrad(p.id)+'">' + getIni(full) + '</div>' +
+    '<div style="flex:1">' +
+    '<div style="font-size:20px;font-weight:700;color:#0f172a">'+esc(full)+'</div>' +
+    '<div style="font-size:12px;color:#64748b;margin-top:3px">'+(calcAge(p.dob)||'—')+' лет · '+esc(p.sex||'—')+' · '+esc(p.tel||'—')+'</div>' +
+    '<div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">'+sbadge(p.status||'Активный')+(p.diag?'<span class="badge bdbl" style="font-size:10px">'+esc(p.diag.substring(0,28))+'</span>':'')+'</div>' +
+    '</div></div>';
+}
 
-        elListContainer.innerHTML = `
-          <div class="section">
-            <div class="section-title">Сводка по демо-данным</div>
-            <table class="small-table">
-              <tr><th>Показатель</th><th>Значение</th></tr>
-              <tr><td>Всего пациентов</td><td>${totalPatients}</td></tr>
-              <tr><td>Регенеративные процедуры</td><td>${totalRegen}</td></tr>
-              <tr><td>УЗИ-исследования</td><td>${totalUSG}</td></tr>
-            </table>
-          </div>
-        `;
-      }
-    }
+// ═══════════════════════════ AI ═══════════════════════════
+function aiCall(msgs, sys, cb) {
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:1500, system: sys || AI_SYS, messages: msgs})
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(d) {
+    var text = '';
+    if (d.content) { for (var i=0;i<d.content.length;i++) text += (d.content[i].text||''); }
+    cb(null, text || 'Нет ответа');
+  })
+  .catch(function(e) { cb(e.message, null); });
+}
 
-    // ==== РЕНДЕР ЦЕНТРАЛЬНОЙ ОБЛАСТИ ====
+function initAI(id, welcome) {
+  AI_SESSIONS[id] = {msgs: []};
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML =
+    '<div class="ai-h"><div class="ai-dk"></div><div class="ai-tl">AI-ассистент</div><span class="ai-bd">Claude AI</span></div>' +
+    '<div class="ai-msgs" id="'+id+'-msgs"><div class="ai-m s"><div class="ai-fr">Система</div>'+esc(welcome||'Готов помочь.')+'</div></div>' +
+    '<div class="ai-row"><input class="ai-inp" id="'+id+'-inp" placeholder="Введите вопрос..." onkeydown="if(event.key===\'Enter\')aiSend(\''+id+'\')"><button class="ai-send" id="'+id+'-btn" onclick="aiSend(\''+id+'\')">➤</button></div>';
+}
 
-    function renderCenter() {
-      const patient = getCurrentPatient();
-      if (!patient) return;
-      const role = roleSelect.value;
+function aiSend(id, auto) {
+  var s = AI_SESSIONS[id]; if (!s) return;
+  var inp = document.getElementById(id+'-inp');
+  var btn = document.getElementById(id+'-btn');
+  var msgs = document.getElementById(id+'-msgs');
+  var txt = auto || (inp ? inp.value.trim() : '');
+  if (!txt) return;
+  if (inp && !auto) inp.value = '';
+  if (btn) btn.disabled = true;
+  s.msgs.push({role:'user', content:txt});
 
-      if (currentSection === "patients" || currentSection === "ai") {
-        elCenterContent.innerHTML = `
-          <div class="section">
-            <div class="section-title">Профиль пациента</div>
-            <div class="section-grid">
-              <div class="field-row">
-                <div class="field-label">ФИО</div>
-                <div class="field-value">${patient.name}</div>
-              </div>
-              <div class="field-row">
-                <div class="field-label">Возраст / пол</div>
-                <div class="field-value">${patient.age} лет, ${patient.gender}</div>
-              </div>
-              <div class="field-row">
-                <div class="field-label">Телефон</div>
-                <div class="field-value">${patient.phone}</div>
-              </div>
-              <div class="field-row">
-                <div class="field-label">Город</div>
-                <div class="field-value">${patient.city}</div>
-              </div>
-              <div class="field-row">
-                <div class="field-label">Основной диагноз</div>
-                <div class="field-value">${patient.mainDiagnosis}</div>
-              </div>
-            </div>
-          </div>
+  var ub = document.createElement('div');
+  ub.className = 'ai-m u';
+  ub.innerHTML = '<div class="ai-fr">👨‍⚕️ Врач</div>' + esc(txt);
+  if (msgs) { msgs.appendChild(ub); msgs.scrollTop = 9999; }
 
-          <div class="section">
-            <div class="section-title">Теги и направления лечения</div>
-            <div class="chips">
-              ${patient.tags.map((t) => `<div class="chip green">${t}</div>`).join("")}
-            </div>
-          </div>
+  var tb = document.createElement('div');
+  tb.className = 'ai-m b'; tb.id = id+'-ty';
+  tb.innerHTML = '<div class="ai-ty"><span></span><span></span><span></span></div>';
+  if (msgs) { msgs.appendChild(tb); msgs.scrollTop = 9999; }
 
-          <div class="section">
-            <div class="section-title">Краткая хроника визитов</div>
-            ${
-              patient.visits && patient.visits.length
-                ? `
-                  <table class="small-table">
-                    <tr>
-                      <th>Дата</th>
-                      <th>Тип визита</th>
-                      <th>Врач</th>
-                      <th>Основная жалоба</th>
-                    </tr>
-                    ${patient.visits
-                      .map(
-                        (v) => `
-                        <tr>
-                          <td>${v.date}</td>
-                          <td>${v.type}</td>
-                          <td>${v.doctor || ""}</td>
-                          <td>${v.complaint || ""}</td>
-                        </tr>
-                      `
-                      )
-                      .join("")}
-                  </table>
-                `
-                : `<div class="panel-subtitle">Визиты ещё не зарегистрированы.</div>`
-            }
-          </div>
-        `;
-      } else if (currentSection === "visits") {
-        const visits = patient.visits || [];
-        if (!visits.length) {
-          elCenterContent.innerHTML =
-            '<div class="panel-subtitle">У пациента пока нет протоколов приёма.</div>';
-          return;
-        }
-        const v = visits[0];
-        elCenterContent.innerHTML = `
-          <div class="section">
-            <div class="section-title">Последний ортопедический приём (${v.date})</div>
-            <div class="section-grid">
-              <div class="field-row">
-                <div class="field-label">Врач</div>
-                <div class="field-value">${v.doctor}</div>
-              </div>
-              <div class="field-row">
-                <div class="field-label">Тип визита</div>
-                <div class="field-value">${v.type}</div>
-              </div>
-            </div>
-          </div>
+  aiCall(s.msgs, null, function(err, reply) {
+    var tyEl = document.getElementById(id+'-ty');
+    if (tyEl && tyEl.parentNode) tyEl.parentNode.removeChild(tyEl);
+    var text = err ? ('Ошибка: ' + err) : reply;
+    s.msgs.push({role:'assistant', content:text});
+    var rb = document.createElement('div');
+    rb.className = 'ai-m b';
+    rb.innerHTML = '<div class="ai-fr">🤖 AI</div>' + esc(text).replace(/\n/g,'<br>');
+    if (msgs) { msgs.appendChild(rb); msgs.scrollTop = 9999; }
+    if (btn) btn.disabled = false;
+  });
+}
 
-          <div class="section">
-            <div class="section-title">Шаблон ортопедического осмотра</div>
-            <div class="section-grid">
-              <div class="field-row">
-                <div class="field-label">Жалобы</div>
-                <div class="field-value">${v.complaint}</div>
-              </div>
-              <div class="field-row">
-                <div class="field-label">Диапазон движений (ROM)</div>
-                <div class="field-value">${v.rom || "не указано"}</div>
-              </div>
-              <div class="field-row">
-                <div class="field-label">Специальные тесты</div>
-                <div class="field-value">${v.tests || "не указано"}</div>
-              </div>
-              <div class="field-row">
-                <div class="field-label">Шкала боли (VAS)</div>
-                <div class="field-value">${v.vas || "не указано"}</div>
-              </div>
-            </div>
-          </div>
+// ═══════════════════════════ PATIENTS FORM ═══════════════════════════
+function ptForm(px, d) {
+  d = d || {};
+  function sel(id, opts, cur) {
+    var h = '';
+    for (var i=0;i<opts.length;i++) h += '<option'+(opts[i]===cur?' selected':'')+'>'+opts[i]+'</option>';
+    return '<select class="fc" id="'+px+'-'+id+'">'+h+'</select>';
+  }
+  return '<div class="g2">' +
+    '<div class="fg"><label class="fl">Фамилия *</label><input class="fc" id="'+px+'-fam" value="'+esc(d.fam||'')+'" placeholder="Иванова"></div>' +
+    '<div class="fg"><label class="fl">Имя *</label><input class="fc" id="'+px+'-nam" value="'+esc(d.nam||'')+'" placeholder="Мария"></div>' +
+    '</div><div class="g3">' +
+    '<div class="fg"><label class="fl">Отчество</label><input class="fc" id="'+px+'-pat" value="'+esc(d.pat||'')+'"></div>' +
+    '<div class="fg"><label class="fl">Дата рождения</label><input class="fc" id="'+px+'-dob" type="date" value="'+(d.dob||'')+'"></div>' +
+    '<div class="fg"><label class="fl">Пол</label>'+sel('sex',['Ж','М'],d.sex||'Ж')+'</div>' +
+    '</div><div class="g2">' +
+    '<div class="fg"><label class="fl">Телефон</label><input class="fc" id="'+px+'-tel" value="'+esc(d.tel||'')+'" placeholder="+7 900 000-00-00"></div>' +
+    '<div class="fg"><label class="fl">Email</label><input class="fc" id="'+px+'-email" type="email" value="'+esc(d.email||'')+'"></div>' +
+    '</div><div class="g2">' +
+    '<div class="fg"><label class="fl">Источник</label>'+sel('src',['Рекомендация','Яндекс','2GIS','Instagram','Telegram','ВКонтакте','Сайт','Другое'],d.src||'Рекомендация')+'</div>' +
+    '<div class="fg"><label class="fl">Статус</label>'+sel('status',['Активный','Наблюдается','Первичный','Завершил лечение','Архив'],d.status||'Активный')+'</div>' +
+    '</div>' +
+    '<div class="fg"><label class="fl">Диагноз МКБ-10</label><input class="fc" id="'+px+'-diag" value="'+esc(d.diag||'')+'" placeholder="M17.1 — Первичный гонартроз"></div>' +
+    '<div class="g2">' +
+    '<div class="fg"><label class="fl">Следующий визит</label><input class="fc" id="'+px+'-next" type="date" value="'+(d.next||'')+'"></div>' +
+    '<div class="fg"><label class="fl">Лечащий врач</label><input class="fc" id="'+px+'-doc" value="'+esc(d.doc||'')+'"></div>' +
+    '</div>' +
+    '<div class="fg"><label class="fl">Примечания</label><textarea class="fc" id="'+px+'-note" rows="2">'+esc(d.note||'')+'</textarea></div>';
 
-          <div class="section">
-            <div class="section-title">План лечения</div>
-            <div class="field-row">
-              <div class="field-label">Назначения и процедуры</div>
-              <div class="field-value">${v.plan || "не указан"}</div>
-            </div>
-          </div>
-        `;
-      } else if (currentSection === "ultrasound") {
-        const usg = patient.usg || [];
-        if (!usg.length) {
-          elCenterContent.innerHTML =
-            '<div class="panel-subtitle">Для пациента нет УЗИ-отчётов.</div>';
-          return;
-        }
-        const u = usg[0];
-        elCenterContent.innerHTML = `
-          <div class="section">
-            <div class="section-title">Протокол УЗИ (${u.date}) — ${u.region}</div>
-            <div class="field-row">
-              <div class="field-label">Краткое заключение</div>
-              <div class="field-value">${u.conclusion}</div>
-            </div>
-          </div>
+}
 
-          <div class="section">
-            <div class="section-title">Структурированный шаблон (пример)</div>
-            <table class="small-table">
-              <tr><th>Структура</th><th>Описание</th></tr>
-              <tr><td>Суставная щель</td><td>Умеренное сужение медиально</td></tr>
-              <tr><td>Хрящ</td><td>Неровный контур, снижение эхогенности участка</td></tr>
-              <tr><td>Синовия</td><td>Утолщена, признаки синовита</td></tr>
-              <tr><td>Выпот</td><td>До 6 мм по медиальному завороту</td></tr>
-            </table>
-          </div>
-        `;
-      } else if (currentSection === "regen") {
-        const regen = patient.regen || [];
-        if (!regen.length) {
-          elCenterContent.innerHTML =
-            '<div class="panel-subtitle">У пациента ещё не проводилась регенеративная терапия.</div>';
-          return;
-        }
-        const r = regen[0];
-        elCenterContent.innerHTML = `
-          <div class="section">
-            <div class="section-title">Регенеративная процедура (${r.date})</div>
-            <div class="section-grid">
-              <div class="field-row">
-                <div class="field-label">Методика</div>
-                <div class="field-value">${r.modality}</div>
-              </div>
-              <div class="field-row">
-                <div class="field-label">Область</div>
-                <div class="field-value">${r.joint}</div>
-              </div>
-              <div class="field-row">
-                <div class="field-label">Протокол</div>
-                <div class="field-value">${r.protocol}</div>
-              </div>
-              <div class="field-row">
-                <div class="field-label">Партия набора/препарата</div>
-                <div class="field-value">${r.batch}</div>
-              </div>
-            </div>
-          </div>
+function getPtForm(px) {
+function gv(id) { var el = document.getElementById(px+’-’+id); return el ? el.value.trim() : ‘’; }
+return {fam:gv(‘fam’),nam:gv(‘nam’),pat:gv(‘pat’),dob:gv(‘dob’),sex:gv(‘sex’),tel:gv(‘tel’),email:gv(‘email’),src:gv(‘src’),status:gv(‘status’),diag:gv(‘diag’),next:gv(‘next’),doc:gv(‘doc’),note:gv(‘note’)};
+}
 
-          <div class="section">
-            <div class="section-title">План курса (пример)</div>
-            <ul style="margin:0;padding-left:18px;font-size:12px;">
-              <li>3 инъекции с интервалом 7–10 дней</li>
-              <li>Ограничение ударной нагрузки на сустав 3–5 дней после каждой процедуры</li>
-              <li>Контрольный осмотр через 6 и 12 недель с оценкой VAS/WOMAC</li>
-            </ul>
-          </div>
-        `;
-      } else if (currentSection === "podiology") {
-        const podo = patient.podology || [];
-        if (!podo.length) {
-          elCenterContent.innerHTML =
-            '<div class="panel-subtitle">Подологические вмешательства не проводились.</div>';
-          return;
-        }
-        const p = podo[0];
-        elCenterContent.innerHTML = `
-          <div class="section">
-            <div class="section-title">Подологическая процедура (${p.date})</div>
-            <div class="section-grid">
-              <div class="field-row">
-                <div class="field-label">Тип процедуры</div>
-                <div class="field-value">${p.type}</div>
-              </div>
-              <div class="field-row">
-                <div class="field-label">Описание</div>
-                <div class="field-value">${p.description}</div>
-              </div>
-              <div class="field-row">
-                <div class="field-label">Статус заживления</div>
-                <div class="field-value">${p.status}</div>
-              </div>
-            </div>
-          </div>
+// ═══════════════════════════ DASHBOARD ═══════════════════════════
+function rDash() {
+var pts=DB(‘pts’), vis=DB(‘vis’), prps=DB(‘prp’), stk=DB(‘stk’);
+var now=new Date(), tStr=today();
+var tVis=[]; for(var i=0;i<vis.length;i++) if(vis[i].date===tStr) tVis.push(vis[i]);
+var mPRP=[]; for(var i=0;i<prps.length;i++){
+if(!prps[i].date) continue;
+var d=new Date(prps[i].date+‘T12:00’);
+if(d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()) mPRP.push(prps[i]);
+}
+var srcs={};for(var i=0;i<pts.length;i++){var s=pts[i].src||‘Другое’;srcs[s]=(srcs[s]||0)+1;}
+var alts=prps.filter?prps.filter(function(p){return p.status===‘В процессе’}).slice(0,5):[];
 
-          <div class="section">
-            <div class="section-title">Мониторинг заживления (пример)</div>
-            <table class="small-table">
-              <tr><th>День</th><th>Состояние раны</th><th>Комментарии</th></tr>
-              <tr><td>1</td><td>Умеренный отёк, серозное отделяемое</td><td>Перевязка, антисептик</td></tr>
-              <tr><td>7</td><td>Грануляции, без признаков инфекции</td><td>Снятие швов при отсутствии жалоб</td></tr>
-              <tr><td>21</td><td>Формирование рубца, без боли</td><td>Рекомендации по уходу</td></tr>
-            </table>
-          </div>
-        `;
-      } else if (currentSection === "analytics") {
-        const totalPatients = patients.length;
-        const totalRegen = patients.reduce(
-          (acc, p) => acc + (p.regen?.length || 0),
-          0
-        );
-        const totalUSG = patients.reduce((acc, p) => acc + (p.usg?.length || 0), 0);
-        const totalPodo = patients.reduce(
-          (acc, p) => acc + (p.podology?.length || 0),
-          0
-        );
+var todayVisHtml=’’;
+if(!tVis.length){
+todayVisHtml=’<div class="empty"><div class="e-ico">📅</div><div class="e-tit">Записей нет</div></div>’;
+} else {
+for(var i=0;i<Math.min(tVis.length,6);i++){
+var v=tVis[i], pt=null;
+for(var j=0;j<pts.length;j++) if(pts[j].id===v.ptId){pt=pts[j];break;}
+todayVisHtml+=’<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #f8fafc">’ +
+‘<div><div style="font-size:13px;font-weight:600">’+esc(pt?pt.fam+’ ‘+pt.nam:’—’)+’</div><div style="font-size:11px;color:#94a3b8">’+esc(v.time||’’)+’ · ‘+esc(v.type)+’</div></div>’ +
+sbadge(‘Активный’)+’</div>’;
+}
+}
 
-        elCenterContent.innerHTML = `
-          <div class="section">
-            <div class="section-title">Основные показатели (по демо-данным)</div>
-            <table class="small-table">
-              <tr><th>Метрика</th><th>Значение</th></tr>
-              <tr><td>Пациенты в системе</td><td>${totalPatients}</td></tr>
-              <tr><td>Регенеративные процедуры</td><td>${totalRegen}</td></tr>
-              <tr><td>УЗИ суставов</td><td>${totalUSG}</td></tr>
-              <tr><td>Подологические вмешательства</td><td>${totalPodo}</td></tr>
-            </table>
-          </div>
-          <div class="section">
-            <div class="section-title">Пример управленческой аналитики</div>
-            <ul style="margin:0;padding-left:18px;font-size:12px;">
-              <li>Доля пациентов с регенеративной терапией среди ортопедических случаев</li>
-              <li>Среднее количество УЗИ на пациента</li>
-              <li>Частота повторных визитов при разных протоколах лечения</li>
-            </ul>
-          </div>
-        `;
-      }
-    }
+var alertsHtml=’’;
+if(!alts.length){
+alertsHtml=’<div class="empty" style="padding:24px"><div class="e-ico">✅</div><div class="e-tit">Алертов нет</div></div>’;
+} else {
+for(var i=0;i<alts.length;i++){
+var r=alts[i], pt=null;
+for(var j=0;j<pts.length;j++) if(pts[j].id===r.ptId){pt=pts[j];break;}
+if(pt) alertsHtml+=’<div class="al al-a">⚠ <b>’+esc(pt.fam+’ ‘+pt.nam)+’</b> — PRP активен · ‘+esc(r.num)+’</div>’;
+}
+}
 
-    // ==== ПСЕВДО-AI ГЕНЕРАЦИЯ ====
+document.getElementById(‘p-dash’).innerHTML =
+‘<div class="ph"><div><div class="ph-t">Дашборд</div><div class="ph-s">’+now.toLocaleDateString(‘ru-RU’,{weekday:‘long’,day:‘numeric’,month:‘long’,year:‘numeric’})+’</div></div>’ +
+‘<div class="ph-a"><button class="btn btn-p b-md" onclick="openVisitModal()">+ Новый приём</button></div></div>’ +
+‘<div class="g4" style="margin-bottom:18px">’ +
+‘<div class="sc" style="background:linear-gradient(135deg,#0071c6,#2563eb)"><div class="sc-i">👥</div><div class="sc-v">’+pts.length+’</div><div class="sc-l">Пациентов в базе</div></div>’ +
+‘<div class="sc" style="background:linear-gradient(135deg,#7c3aed,#8b5cf6)"><div class="sc-i">📅</div><div class="sc-v">’+tVis.length+’</div><div class="sc-l">Визитов сегодня</div></div>’ +
+‘<div class="sc" style="background:linear-gradient(135deg,#059669,#10b981)"><div class="sc-i">💉</div><div class="sc-v">’+mPRP.length+’</div><div class="sc-l">PRP в месяце</div></div>’ +
+‘<div class="sc" style="background:linear-gradient(135deg,#d97706,#f59e0b)"><div class="sc-i">📦</div><div class="sc-v">’+stk.length+’</div><div class="sc-l">Позиций склада</div></div>’ +
+‘</div>’ +
+‘<div class="g2" style="margin-bottom:18px">’ +
+‘<div class="card cp"><div class="sh">Приёмы сегодня</div>’+todayVisHtml+’</div>’ +
+‘<div class="ai-p" id="ai-dash" style="min-height:280px"></div>’ +
+‘</div>’ +
+‘<div class="g2">’ +
+‘<div class="card cp"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><div class="sh" style="margin:0;border:none;padding:0">Клинические алерты</div><span class="badge '+(alts.length?'bdam':'bdsl')+'">’+alts.length+’</span></div>’+alertsHtml+’</div>’ +
+‘<div class="card cp"><div class="sh">Источники пациентов</div>’+barChart(srcs)+’</div>’ +
+‘</div>’;
 
-    const aiInput = document.getElementById("ai-input");
-    const aiOutput = document.getElementById("ai-output");
-    const btnAiGenerate = document.getElementById("btn-ai-generate");
-    const btnAiSummary = document.getElementById("btn-ai-summary");
+initAI(‘ai-dash’, ‘Здравствуйте! Я AI-ассистент клиники АльтернативА. Помогу составить протокол, ответить на клинический вопрос или подготовить документ.’);
+}
 
-    function buildDemoSummaryFromPatient() {
-      const p = getCurrentPatient();
-      let text = `Пациент: ${p.name}, ${p.age} лет, ${p.gender}. Основной диагноз: ${p.mainDiagnosis}.\n`;
+// ═══════════════════════════ SCHEDULE ═══════════════════════════
+function rSched() {
+var vis=DB(‘vis’), pts=DB(‘pts’);
+var now=new Date();
+var mon=new Date(now); mon.setDate(now.getDate()-((now.getDay()||7)-1)+wkOff*7);
+var days=[];
+for(var i=0;i<5;i++){var d=new Date(mon);d.setDate(mon.getDate()+i);days.push(d);}
+var TIMES=[‘08:00’,‘09:00’,‘10:00’,‘11:00’,‘12:00’,‘13:00’,‘14:00’,‘15:00’,‘16:00’,‘17:00’];
+var DN=[‘Пн’,‘Вт’,‘Ср’,‘Чт’,‘Пт’];
+var APC=[[‘rgba(0,113,198,.08)’,’#0071c6’],[‘rgba(5,150,105,.08)’,’#059669’],[‘rgba(217,119,6,.08)’,’#d97706’],[‘rgba(220,38,38,.08)’,’#dc2626’],[‘rgba(124,58,237,.08)’,’#7c3aed’]];
+var tStr=today();
+var wlbl=days[0].toLocaleDateString(‘ru-RU’,{day:‘numeric’,month:‘long’})+’ — ’+days[4].toLocaleDateString(‘ru-RU’,{day:‘numeric’,month:‘long’,year:‘numeric’});
 
-      if (p.visits && p.visits.length) {
-        const v = p.visits[0];
-        text += `\nПоследний приём (${v.date}, ${v.type}, ${v.doctor}):\nЖалобы: ${v.complaint}.\nROM: ${v.rom || "не указано"}.\nСпециальные тесты: ${v.tests || "не указано"}.\nVAS: ${v.vas || "не указано"}.\nПлан лечения: ${v.plan || "не указан"}.\n`;
-      }
+var gh=’<div class="sgh"></div>’;
+for(var i=0;i<5;i++){
+var ds=days[i].toISOString().split(‘T’)[0];
+gh+=’<div class="sgh'+(ds===tStr?' td':'')+'">’+DN[i]+’ ‘+days[i].getDate()+’.’+(String(days[i].getMonth()+1).padStart(2,‘0’))+’</div>’;
+}
+for(var ti=0;ti<TIMES.length;ti++){
+gh+=’<div class="sgt">’+TIMES[ti]+’</div>’;
+for(var di=0;di<5;di++){
+var ds=days[di].toISOString().split(‘T’)[0];
+var dv=vis.filter?vis.filter(function(v){return v.date===ds&&v.time===TIMES[ti]}):[];
+var cellHtml=’’;
+for(var vi=0;vi<dv.length;vi++){
+var v=dv[vi];
+var pt=null; for(var j=0;j<pts.length;j++) if(pts[j].id===v.ptId){pt=pts[j];break;}
+var ci=vi%APC.length;
+cellHtml+=’<div class="apt" style="background:'+APC[ci][0]+';border-left-color:'+APC[ci][1]+'" onclick="toast(\''+esc((pt?pt.fam+' '+pt.nam:'?')+' — '+v.type)+'\')">’ +
+‘<div style="font-weight:700;color:#1e293b">’+(pt?esc(pt.fam+’ ‘+pt.nam.charAt(0)+’.’):’?’)+’</div>’ +
+‘<div style="color:#64748b;margin-top:1px">’+esc(v.type)+’</div></div>’;
+}
+gh+=’<div class="sgc">’+cellHtml+’</div>’;
+}
+}
 
-      if (p.usg && p.usg.length) {
-        const u = p.usg[0];
-        text += `\nУЗИ ${u.date}, область: ${u.region}. Заключение: ${u.conclusion}.\n`;
-      }
+document.getElementById(‘p-sched’).innerHTML =
+‘<div class="ph"><div><div class="ph-t">Расписание</div><div class="ph-s">’+wlbl+’</div></div>’ +
+‘<div class="ph-a">’ +
+‘<button class="btn btn-s b-sm" onclick="wkOff--;rSched()">← Назад</button>’ +
+‘<button class="btn btn-p b-md" onclick="openVisitModal()">+ Запись</button>’ +
+‘<button class="btn btn-s b-sm" onclick="wkOff++;rSched()">Вперёд →</button>’ +
+‘</div></div>’ +
+‘<div class="card" style="overflow:hidden"><div class="sgr" style="grid-template-columns:56px repeat(5,1fr)">’+gh+’</div></div>’;
+}
 
-      if (p.regen && p.regen.length) {
-        const r = p.regen[0];
-        text += `\nПроведена процедура регенеративной терапии: ${r.modality}, область: ${r.joint}, протокол: ${r.protocol}, партия: ${r.batch}.\n`;
-      }
+// ═══════════════════════════ VISIT MODAL ═══════════════════════════
+function openVisitModal() {
+var timeopts = [‘08:00’,‘08:30’,‘09:00’,‘09:30’,‘10:00’,‘10:30’,‘11:00’,‘11:30’,‘12:00’,‘13:00’,‘14:00’,‘15:00’,‘16:00’,‘17:00’];
+document.getElementById(‘mb-vadd’).innerHTML =
+‘<div class="g2">’ +
+‘<div class="fg"><label class="fl">Пациент *</label><select class="fc" id="va-pt">’+ptOpts()+’</select></div>’ +
+‘<div class="fg"><label class="fl">Время</label><select class="fc" id="va-time">’+timeopts.map(function(t){return’<option>’+t+’</option>’}).join(’’)+’</select></div>’ +
+‘</div><div class="g2">’ +
+‘<div class="fg"><label class="fl">Дата *</label><input class="fc" id="va-date" type="date" value="'+today()+'"></div>’ +
+‘<div class="fg"><label class="fl">Тип приёма</label><select class="fc" id="va-type"><option>Первичный осмотр</option><option>Повторный осмотр</option><option>PRP-инъекция</option><option>УЗИ суставов</option><option>Подология</option><option>Реабилитация</option><option>Консультация</option></select></div>’ +
+‘</div>’ +
+‘<div class="fg"><label class="fl">Примечание</label><input class="fc" id="va-note" placeholder="Цель визита..."></div>’ +
+‘<div class="m-foot"><button class="btn btn-s b-md" onclick="closeModal(\'m-vadd\')">Отмена</button><button class="btn btn-p b-md" onclick="saveVisit()">📅 Записать</button></div>’;
+openModal(‘m-vadd’);
+}
+function saveVisit() {
+var ptId=document.getElementById(‘va-pt’).value;
+var date=document.getElementById(‘va-date’).value;
+if(!ptId||!date){toast(‘⚠ Выберите пациента и дату’,‘err’);return;}
+var vis=DB(‘vis’);
+vis.push({id:uid(‘v’),ptId:ptId,date:date,time:document.getElementById(‘va-time’).value||‘10:00’,type:document.getElementById(‘va-type’).value||‘Приём’,note:document.getElementById(‘va-note’).value||’’});
+DBs(‘vis’,vis); closeModal(‘m-vadd’); buildNav();
+var pts=DB(‘pts’); var pt=null; for(var i=0;i<pts.length;i++) if(pts[i].id===ptId){pt=pts[i];break;}
+toast(’✅ Записан: ‘+(pt?pt.fam+’ ’+pt.nam:‘пациент’),‘ok’);
+if(document.getElementById(‘p-sched’).classList.contains(‘on’)) rSched();
+if(document.getElementById(‘p-dash’).classList.contains(‘on’)) rDash();
+}
 
-      text += `\nAI-рекомендация (демо, не является мед. заключением): рассмотреть продолжение консервативной терапии с контролем динамики боли и функции, обсуждением альтернатив (дополнительные инъекции, реабилитация, при неэффективности — консультация по хирургическому лечению).\n`;
-      return text;
-    }
+// ═══════════════════════════ PATIENTS ═══════════════════════════
+function rPts(q) {
+q = q || ‘’;
+var pts=DB(‘pts’);
+var list = q ? pts.filter(function(p){return (p.fam+’ ‘+p.nam+’ ‘+(p.tel||’’)+’ ‘+(p.diag||’’)).toLowerCase().indexOf(q.toLowerCase())>=0;}) : pts;
+var canEdit = CU && CU.role !== ‘admin’;
+var rows=’’;
+if(!list.length){
+rows=’<tr><td colspan="7"><div class="empty"><div class="e-ico">👥</div><div class="e-tit">Пациентов нет</div><div class="e-sub">Добавьте первого пациента</div></div></td></tr>’;
+} else {
+for(var i=0;i<list.length;i++){
+var p=list[i]; var full=p.fam+’ ‘+p.nam+(p.pat?’ ‘+p.pat:’’);
+rows+=’<tr onclick="viewPt(\''+p.id+'\')">’+
+‘<td><div style="display:flex;align-items:center;gap:9px">’+
+‘<div class="av av-s" style="background:'+ptGrad(p.id)+'">’+getIni(full)+’</div>’+
+‘<div><div style="font-weight:600">’+esc(full)+’</div><div style="font-size:11px;color:#94a3b8">’+esc(p.tel||’’)+’</div></div></div></td>’+
+‘<td>’+(calcAge(p.dob)||’—’)+’ л · ‘+esc(p.sex||’—’)+’</td>’+
+‘<td>’+esc(p.tel||’—’)+’</td>’+
+‘<td>’+(p.diag?’<span class="badge bdbl" style="font-size:10px">’+esc(p.diag.substring(0,22))+’</span>’:’—’)+’</td>’+
+‘<td><span class="badge bdsl" style="font-size:10px">’+esc(p.src||’—’)+’</span></td>’+
+‘<td>’+sbadge(p.status||‘Активный’)+’</td>’+
+‘<td onclick="event.stopPropagation()" style="text-align:right">’+(canEdit?’<button class="btn btn-g b-xs" onclick="editPt(\''+p.id+'\')">✏️</button>’:’’)+’</td></tr>’;
+}
+}
+document.getElementById(‘p-pts’).innerHTML =
+‘<div class="ph"><div><div class="ph-t">База пациентов</div><div class="ph-s">’+pts.length+’ пациент’+(pts.length===1?’’:pts.length<5?‘а’:‘ов’)+’</div></div>’+
+‘<div class="ph-a">’+
+‘<input class="fc" style="width:210px;padding:7px 12px;font-size:12px" placeholder="🔍 Поиск..." value="'+esc(q)+'" oninput="rPts(this.value)">’+
+(canEdit?’<button class="btn btn-p b-md" onclick="openAddPt()">+ Добавить</button>’:’’)+
+‘</div></div>’+
+‘<div class="card" style="overflow:hidden"><table class="tbl">’+
+‘<thead><tr><th>Пациент</th><th>Возраст</th><th>Телефон</th><th>Диагноз</th><th>Источник</th><th>Статус</th><th></th></tr></thead>’+
+‘<tbody>’+rows+’</tbody></table></div>’;
+}
+function openAddPt() {
+document.getElementById(‘mb-ptadd’).innerHTML = ptForm(‘ap’) +
+‘<div class="m-foot"><button class="btn btn-s b-md" onclick="closeModal(\'m-ptadd\')">Отмена</button><button class="btn btn-p b-md" onclick="savePt()">💾 Сохранить</button></div>’;
+openModal(‘m-ptadd’);
+}
+function savePt() {
+var d=getPtForm(‘ap’);
+if(!d.fam||!d.nam){toast(‘⚠ Укажите фамилию и имя’,‘err’);return;}
+var pts=DB(‘pts’); pts.unshift(Object.assign({},d,{id:uid(‘pt’),created:today()})); DBs(‘pts’,pts);
+closeModal(‘m-ptadd’); rPts(); buildNav();
+toast(‘✅ Пациент ‘+d.fam+’ ‘+d.nam+’ добавлен’,‘ok’);
+}
+function editPt(id) {
+var pts=DB(‘pts’); var p=null; for(var i=0;i<pts.length;i++) if(pts[i].id===id){p=pts[i];break;}
+if(!p) return;
+document.getElementById(‘mb-ptedit’).innerHTML =
+‘<input type="hidden" id="ep-id" value="'+id+'">’+ptForm(‘ep’,p)+
+‘<div class="m-foot"><button class="btn btn-d b-xs" onclick="deletePt(\''+id+'\')">🗑 Удалить</button><div style="flex:1"></div><button class="btn btn-s b-md" onclick="closeModal(\'m-ptedit\')">Отмена</button><button class="btn btn-p b-md" onclick="updPt()">💾 Сохранить</button></div>’;
+openModal(‘m-ptedit’);
+}
+function updPt() {
+var id=document.getElementById(‘ep-id’).value;
+var d=getPtForm(‘ep’);
+if(!d.fam||!d.nam){toast(‘⚠ Укажите фамилию и имя’,‘err’);return;}
+var pts=DB(‘pts’);
+for(var i=0;i<pts.length;i++) if(pts[i].id===id){Object.assign(pts[i],d);break;}
+DBs(‘pts’,pts); closeModal(‘m-ptedit’); rPts();
+toast(‘✅ Данные обновлены’,‘ok’);
+}
+function deletePt(id) {
+var pts=DB(‘pts’); var p=null; for(var i=0;i<pts.length;i++) if(pts[i].id===id){p=pts[i];break;}
+confirm2(‘Удалить пациента?’, (p?p.fam+’ ‘+p.nam:‘Пациент’)+’ будет удалён.’, function(){
+DBs(‘pts’, DB(‘pts’).filter(function(x){return x.id!==id;}));
+closeModal(‘m-ptedit’); rPts(); buildNav(); toast(‘🗑 Пациент удалён’);
+});
+}
+function viewPt(id) {
+var pts=DB(‘pts’); var p=null; for(var i=0;i<pts.length;i++) if(pts[i].id===id){p=pts[i];break;}
+if(!p) return;
+var full=p.fam+’ ‘+p.nam+(p.pat?’ ‘+p.pat:’’);
+var vis=DB(‘vis’).filter?DB(‘vis’).filter(function(v){return v.ptId===id;}).slice().reverse().slice(0,5):[];
+var visHtml=’’;
+for(var i=0;i<vis.length;i++){
+var v=vis[i];
+visHtml+=’<div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid #f8fafc">’+
+‘<div style="font-size:11px;color:#94a3b8;min-width:110px">’+fmtD(v.date)+’ ‘+esc(v.time||’’)+’</div>’+
+‘<div><div style="font-size:12px;font-weight:600">’+esc(v.type)+’</div>’+(v.note?’<div style="font-size:11px;color:#64748b">’+esc(v.note)+’</div>’:’’)+’</div></div>’;
+}
+document.getElementById(‘mb-ptview-t’).textContent = full;
+document.getElementById(‘mb-ptview’).innerHTML = ptBanner(p) +
+‘<div class="g2" style="margin-bottom:12px">’ +
+[[‘Дата рождения’,fmtD(p.dob)],[‘Возраст’,(calcAge(p.dob)||’—’)+’ лет’],[‘Телефон’,p.tel||’—’],[‘Email’,p.email||’—’],[‘Источник’,p.src||’—’],[‘Врач’,p.doc||’—’]].map(function(row){
+return ‘<div style="background:#f8fafc;padding:10px;border-radius:8px;border:1px solid #e2e8f0"><div style="font-size:9px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px">’+row[0]+’</div><div style="font-size:13px;font-weight:600">’+esc(row[1])+’</div></div>’;
+}).join(’’) + ‘</div>’ +
+(p.next?’<div class="al al-g">📅 Следующий визит: <b>’+fmtD(p.next)+’</b></div>’:’’) +
+(p.note?’<div class="al al-a">📝 ‘+esc(p.note)+’</div>’:’’) +
+(vis.length?’<div class="sh" style="margin-top:14px">История визитов</div>’+visHtml:’’) +
+‘<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px">’+
+‘<button class="btn btn-s b-md" onclick="closeModal(\'m-ptview\')">Закрыть</button>’+
+‘<button class="btn btn-p b-md" onclick="closeModal(\'m-ptview\');editPt(\''+id+'\')">✏️ Редактировать</button></div>’;
+openModal(‘m-ptview’);
+}
 
-    btnAiSummary.addEventListener("click", () => {
-      aiOutput.textContent = buildDemoSummaryFromPatient();
-    });
+// ═══════════════════════════ EMR ═══════════════════════════
+function rEMR() {
+document.getElementById(‘p-emr’).innerHTML =
+‘<div class="ph"><div><div class="ph-t">Приём / ЭМК</div><div class="ph-s">Электронная медицинская карта</div></div></div>’ +
+‘<div class="g2" style="margin-bottom:12px"><div class="fg"><label class="fl">Пациент</label><select class="fc" id="emr-pt" onchange="loadEMR()">’+ptOpts()+’</select></div></div>’ +
+‘<div id="emr-body"><div class="empty"><div class="e-ico">📋</div><div class="e-tit">Выберите пациента</div></div></div>’;
+}
+function loadEMR() {
+var id=document.getElementById(‘emr-pt’).value;
+var body=document.getElementById(‘emr-body’);
+if(!id){body.innerHTML=’<div class="empty"><div class="e-ico">📋</div><div class="e-tit">Выберите пациента</div></div>’;return;}
+var pts=DB(‘pts’); var p=null; for(var i=0;i<pts.length;i++) if(pts[i].id===id){p=pts[i];break;}
+if(!p) return;
+var vis=DB(‘vis’).filter?DB(‘vis’).filter(function(v){return v.ptId===id;}).slice().reverse().slice(0,5):[];
+var visHtml=vis.length?vis.map(function(v){return’<div style="display:flex;gap:12px;padding:9px 0;border-bottom:1px solid #f8fafc"><div style="font-size:11px;color:#94a3b8;min-width:110px">’+fmtD(v.date)+’ ‘+esc(v.time||’’)+’</div><div><div style="font-size:12px;font-weight:600">’+esc(v.type)+’</div>’+(v.note?’<div style="font-size:11px;color:#64748b">’+esc(v.note)+’</div>’:’’)+’</div></div>’;}).join(’’):’<div class="empty"><div class="e-ico">📅</div><div class="e-tit">Визитов нет</div></div>’;
 
-    btnAiGenerate.addEventListener("click", () => {
-      const context = aiInput.value.trim();
-      const p = getCurrentPatient();
-      if (!context) {
-        aiOutput.textContent =
-          "Введите клинический контекст слева. Я сгенерирую структурированный черновик протокола или выписки на основе вашего описания и демо-данных пациента.";
-        return;
-      }
+body.innerHTML = ptBanner(p) +
+‘<div class="tabs"><div class="tab on" onclick="swTab(this,\'et-exam\')">🩺 Осмотр</div><div class="tab" onclick="swTab(this,\'et-hist\')">📋 История</div><div class="tab" onclick="swTab(this,\'et-plan\')">📌 План</div></div>’ +
+‘<div class="gm"><div>’ +
+‘<div id="et-exam"><div class="card cp" style="margin-bottom:12px"><div class="sh">Жалобы</div>’ +
+‘<div class="g2"><div class="fg"><label class="fl">Зона боли</label><select class="fc"><option>Коленный (правый)</option><option>Коленный (левый)</option><option>Тазобедренный</option><option>Плечевой</option><option>Голеностопный</option></select></div>’ +
+‘<div class="fg"><label class="fl">Характер</label><select class="fc"><option>Ноющая</option><option>Острая</option><option>Стартовая</option><option>Жгучая</option></select></div></div>’ +
+‘<div class="fg"><label class="fl">ВАШ 0–10</label><div class="vas"><span style="font-size:10px;color:#94a3b8">0</span><input type="range" min="0" max="10" value="5" oninput="this.nextElementSibling.nextElementSibling.textContent=this.value"><span style="font-size:10px;color:#94a3b8">10</span><div class="vas-n">5</div></div></div>’ +
+‘<div class="fg"><label class="fl">Анамнез</label><textarea class="fc" rows="2" placeholder="Давность, предшествующее лечение..."></textarea></div></div>’ +
+‘<div class="card cp"><div class="sh">Диагноз и назначения</div>’ +
+‘<div class="fg"><label class="fl">Диагноз МКБ-10</label><input class="fc" value="'+esc(p.diag||'')+'" placeholder="M17.1"></div>’ +
+[‘💉 PRP-терапия’,‘🔬 УЗИ-контроль’,‘🏃 ЛФК’,‘💊 Медикаменты’,‘🦶 Подология’].map(function(l){return’<label class="ckr"><input type="checkbox"> <span>’+l+’</span></label>’;}).join(’’) +
+‘<div style="display:flex;gap:8px;margin-top:12px"><button class="btn btn-p b-sm" onclick="toast(\'✅ Сохранено\',\'ok\')">💾 Сохранить</button><button class="btn btn-s b-sm" onclick="aiSend(\'ai-emr\',\'Составь заключение ортопеда для '+esc(p.fam+' '+p.nam)+'\')">🤖 AI-заключение</button></div></div></div>’ +
+‘<div id="et-hist" style="display:none"><div class="card cp"><div class="sh">История визитов</div>’+visHtml+’</div></div>’ +
+‘<div id="et-plan" style="display:none"><div class="card cp"><div class="sh">План лечения</div>’ +
+‘<div class="stg stg-b"><div class="stgt stg">💉 PRP-терапия</div><textarea class="fc" rows="2" placeholder="Инъекций: 3, зона: коленный, интервал: 14 дней" style="font-size:11px"></textarea></div>’ +
+‘<div class="stg stg-g"><div class="stgt stg">🏃 ЛФК / Реабилитация</div><textarea class="fc" rows="2" placeholder="Этапы, упражнения, нагрузка..." style="font-size:11px"></textarea></div>’ +
+‘<button class="btn btn-p b-sm" onclick="toast(\'✅ План сохранён\',\'ok\')">💾 Сохранить план</button></div></div>’ +
+‘</div><div class="ai-p" id="ai-emr" style="position:sticky;top:0"></div></div>’;
 
-      const role = roleSelect.value;
-      let header = "";
-      if (role === "orthopedist") {
-        header = "Черновик протокола ортопедического приёма\n\n";
-      } else if (role === "usg") {
-        header = "Черновик заключения УЗИ опорно-двигательного аппарата\n\n";
-      } else if (role === "podiatrist") {
-        header = "Черновик протокола подологической процедуры\n\n";
-      } else {
-        header = "Черновик медицинского документа\n\n";
-      }
+initAI(‘ai-emr’, ‘Анализирую карту: ‘+p.fam+’ ‘+p.nam+(p.diag?’, ‘+p.diag:’’)+’. Чем помочь?’);
+}
+function swTab(el, tid) {
+var tabs=el.parentElement.querySelectorAll(’.tab’);
+for(var i=0;i<tabs.length;i++) tabs[i].classList.remove(‘on’);
+el.classList.add(‘on’);
+var ids=[‘et-exam’,‘et-hist’,‘et-plan’];
+for(var i=0;i<ids.length;i++){var e=document.getElementById(ids[i]);if(e)e.style.display=‘none’;}
+var t=document.getElementById(tid); if(t) t.style.display=‘block’;
+}
 
-      const result =
-        header +
-        `Пациент: ${p.name}, ${p.age} лет, ${p.gender}.\n` +
-        `Основной диагноз: ${p.mainDiagnosis}.\n\n` +
-        `Основание для визита / клиническая ситуация:\n${context}\n\n` +
-        `Рекомендации (демо):\n` +
-        `1. Уточнить объективный статус сустава(ов) с использованием стандартизированных ортопедических тестов и шкал боли.\n` +
-        `2. При наличии показаний — провести УЗИ проблемной области с фиксацией структурированных полей (выпот, хрящ, сухожилия, синовия).\n` +
-        `3. Рассмотреть применение регенеративной терапии (PRP/BMAC/ГК) согласно внутренним протоколам клиники и противопоказаниям.\n` +
-        `4. Обсудить с пациентом варианты реабилитации и контрольных визитов.\n\n` +
-        `Важно: данный текст — автоматически сгенерированный черновик. Врач обязан проверить, скорректировать и утвердить документ.`;
+// ═══════════════════════════ PRP ═══════════════════════════
+function rPRP() {
+var prps=DB(‘prp’), pts=DB(‘pts’), now=new Date();
+var mPRP=prps.filter?prps.filter(function(p){if(!p.date)return false;var d=new Date(p.date+‘T12:00’);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();}):[];
+var rows=’’;
+if(!prps.length){
+rows=’<tr><td colspan="7"><div class="empty"><div class="e-ico">💉</div><div class="e-tit">Протоколов нет</div></div></td></tr>’;
+} else {
+for(var i=0;i<prps.length;i++){
+var r=prps[i]; var pt=null; for(var j=0;j<pts.length;j++) if(pts[j].id===r.ptId){pt=pts[j];break;}
+rows+=’<tr><td><b>’+esc(pt?pt.fam+’ ‘+pt.nam:’—’)+’</b></td><td>’+esc(r.zone||’—’)+’</td><td><span class="badge bdbl">’+esc(r.num||’—’)+’</span></td><td>’+fmtD(r.date)+’</td><td>’+sbadge(r.status||‘В процессе’)+’</td><td style="text-align:right"><button class="btn btn-d b-xs" onclick="delPRP(\''+r.id+'\')">🗑</button></td></tr>’;
+}
+}
+document.getElementById(‘p-prp’).innerHTML =
+‘<div class="ph"><div><div class="ph-t">PRP-терапия</div><div class="ph-s">Протоколы инъекций</div></div><div class="ph-a"><button class="btn btn-p b-md" onclick="openPRPModal()">+ Новый протокол</button></div></div>’ +
+‘<div class="g4" style="margin-bottom:18px">’ +
+‘<div class="sc" style="background:linear-gradient(135deg,#0071c6,#2563eb)"><div class="sc-v">’+prps.length+’</div><div class="sc-l">Всего процедур</div></div>’ +
+‘<div class="sc" style="background:linear-gradient(135deg,#059669,#10b981)"><div class="sc-v">’+(prps.filter?prps.filter(function(p){return p.status===‘В процессе’;}).length:0)+’</div><div class="sc-l">Активных курсов</div></div>’ +
+‘<div class="sc" style="background:linear-gradient(135deg,#7c3aed,#8b5cf6)"><div class="sc-v">’+(prps.filter?prps.filter(function(p){return p.status===‘Завершён’;}).length:0)+’</div><div class="sc-l">Завершённых</div></div>’ +
+‘<div class="sc" style="background:linear-gradient(135deg,#d97706,#f59e0b)"><div class="sc-v">’+mPRP.length+’</div><div class="sc-l">В этом месяце</div></div>’ +
+‘</div>’ +
+‘<div class="card" style="overflow:hidden"><table class="tbl"><thead><tr><th>Пациент</th><th>Зона</th><th>Курс</th><th>Дата</th><th>Статус</th><th></th></tr></thead><tbody>’+rows+’</tbody></table></div>’;
+}
+function openPRPModal() {
+var numOpts=[‘1 из 3’,‘2 из 3’,‘3 из 3’,‘1 из 1’,‘1 из 5’,‘2 из 5’,‘3 из 5’].map(function(v){return’<option>’+v+’</option>’;}).join(’’);
+var ciList=[‘Онкология — нет’,‘Тромбоцитопения — нет’,‘Активная инфекция — нет’,‘Антикоагулянты — нет’,‘НПВС отменены (3 дня)’,‘Беременность — нет’];
+document.getElementById(‘mb-prp’).innerHTML =
+‘<div class="g2"><div class="fg"><label class="fl">Пациент *</label><select class="fc" id="prp-pt">’+ptOpts()+’</select></div><div class="fg"><label class="fl">Инъекция №</label><select class="fc" id="prp-num">’+numOpts+’</select></div></div>’ +
+‘<div class="g3"><div class="fg"><label class="fl">Зона введения</label><input class="fc" id="prp-zone" placeholder="Коленный правый"></div><div class="fg"><label class="fl">Дата</label><input class="fc" id="prp-date" type="date" value="'+today()+'"></div><div class="fg"><label class="fl">Контроль</label><select class="fc" id="prp-ctrl"><option>УЗИ-навигация</option><option>Клинически</option></select></div></div>’ +
+‘<div class="sh">Забор крови</div>’ +
+‘<div class="g3"><div class="fg"><label class="fl">Кровь (мл)</label><input class="fc" id="prp-blood" type="number" value="27"></div><div class="fg"><label class="fl">PRP (мл)</label><input class="fc" id="prp-vol" type="number" value="4"></div><div class="fg"><label class="fl">Тромбоциты</label><input class="fc" id="prp-plt" placeholder="—"></div></div>’ +
+‘<div class="sh">Проверка противопоказаний</div>’ +
+ciList.map(function(l){return’<label class="ckr"><input type="checkbox" checked> <span>’+l+’</span></label>’;}).join(’’) +
+‘<div class="fg" style="margin-top:12px"><label class="fl">Статус курса</label><select class="fc" id="prp-status"><option>В процессе</option><option>Завершён</option></select></div>’ +
+‘<div class="fg"><label class="fl">Примечания</label><textarea class="fc" id="prp-note" rows="2" placeholder="Переносимость, особенности..."></textarea></div>’ +
+‘<div class="m-foot"><button class="btn btn-s b-md" onclick="closeModal(\'m-prp\')">Отмена</button><button class="btn btn-p b-md" onclick="savePRP()">💾 Сохранить</button></div>’;
+openModal(‘m-prp’);
+}
+function savePRP() {
+var ptId=document.getElementById(‘prp-pt’).value;
+if(!ptId){toast(‘⚠ Выберите пациента’,‘err’);return;}
+var r={id:uid(‘prp’),ptId:ptId,num:document.getElementById(‘prp-num’).value,zone:document.getElementById(‘prp-zone’).value,date:document.getElementById(‘prp-date’).value||today(),ctrl:document.getElementById(‘prp-ctrl’).value,blood:document.getElementById(‘prp-blood’).value,vol:document.getElementById(‘prp-vol’).value,plt:document.getElementById(‘prp-plt’).value,status:document.getElementById(‘prp-status’).value||‘В процессе’,note:document.getElementById(‘prp-note’).value};
+var prps=DB(‘prp’); prps.unshift(r); DBs(‘prp’,prps);
+closeModal(‘m-prp’); rPRP(); toast(‘✅ Протокол PRP сохранён’,‘ok’);
+}
+function delPRP(id){confirm2(‘Удалить протокол?’,‘Протокол будет удалён.’,function(){DBs(‘prp’,DB(‘prp’).filter(function(x){return x.id!==id;}));rPRP();toast(‘🗑 Удалено’);});}
 
-      aiOutput.textContent = result;
-    });
+// ═══════════════════════════ UZI ═══════════════════════════
+function rUZI() {
+document.getElementById(‘p-uzi’).innerHTML =
+‘<div class="ph"><div><div class="ph-t">УЗИ-диагностика</div><div class="ph-s">Протоколы ультразвукового исследования суставов</div></div></div>’ +
+‘<div class="gm"><div class="card cp"><div class="sh">Протокол УЗИ</div>’ +
+‘<div class="g2"><div class="fg"><label class="fl">Пациент</label><select class="fc">’+ptOpts()+’</select></div><div class="fg"><label class="fl">Сустав</label><select class="fc" id="uzi-joint"><option>Коленный</option><option>Тазобедренный</option><option>Плечевой</option><option>Голеностопный</option></select></div></div>’ +
+‘<div class="g2"><div class="fg"><label class="fl">Сторона</label><select class="fc"><option>Правая</option><option>Левая</option><option>Двусторонняя</option></select></div><div class="fg"><label class="fl">Дата</label><input class="fc" type="date" value="'+today()+'"></div></div>’ +
+‘<div class="sh">Параметры</div>’ +
+‘<div class="g3"><div class="fg"><label class="fl">Щель медиально (мм)</label><input class="fc" type="number" step="0.1" placeholder="норма ≥4"></div><div class="fg"><label class="fl">Хрящ (мм)</label><input class="fc" type="number" step="0.1" placeholder="норма 2-4"></div><div class="fg"><label class="fl">Выпот (мл)</label><input class="fc" type="number" step="0.1" placeholder="—"></div></div>’ +
+‘<div class="fg"><label class="fl">Заключение</label><textarea class="fc" id="uzi-concl" rows="3" placeholder="Эхо-признаки..."></textarea></div>’ +
+‘<div style="display:flex;gap:8px"><button class="btn btn-p b-sm" onclick="toast(\'✅ Сохранено\',\'ok\')">💾 Сохранить</button><button class="btn btn-s b-sm" onclick="aiUZI()">🤖 AI-заключение</button></div></div>’ +
+‘<div class="ai-p" id="ai-uzi"></div></div>’;
+initAI(‘ai-uzi’, ‘Готов составить заключение УЗИ суставов. Укажите параметры исследования.’);
+}
+function aiUZI() {
+var joint=document.getElementById(‘uzi-joint’).value||‘коленный’;
+aiSend(‘ai-uzi’, ‘Составь эхографическое заключение УЗИ ‘+joint+’ сустава с признаками артроза 2 степени, умеренным синовитом.’);
+}
 
-    // ==== СОБЫТИЯ ====
+// ═══════════════════════════ PODOLOGY ═══════════════════════════
+function rPod() {
+document.getElementById(‘p-pod’).innerHTML =
+‘<div class="ph"><div><div class="ph-t">Подология</div></div></div>’ +
+‘<div class="g2"><div class="card cp"><div class="sh">Протокол осмотра</div>’ +
+‘<div class="fg"><label class="fl">Пациент</label><select class="fc">’+ptOpts()+’</select></div>’ +
+‘<div class="sh">Состояние кожи</div>’ +
+[‘Гиперкератоз’,‘Трещины’,‘Мозоли / натоптыши’,‘Грибковое поражение’,‘Мацерация’].map(function(l){return’<label class="ckr"><input type="checkbox"> <span>’+l+’</span></label>’;}).join(’’) +
+‘<div class="sh" style="margin-top:10px">Деформации</div>’ +
+‘<div class="g2"><div class="fg"><label class="fl">Hallux valgus</label><select class="fc"><option>Нет</option><option>I</option><option>II</option><option>III</option></select></div><div class="fg"><label class="fl">Плоскостопие</label><select class="fc"><option>Нет</option><option>I</option><option>II</option><option>III</option></select></div></div>’ +
+‘<div class="sh">Манипуляции</div>’ +
+[‘Обработка гиперкератоза’,‘Обработка ногтей’,‘Удаление мозолей’,‘Антисептическая обработка’].map(function(l){return’<label class="ckr"><input type="checkbox"> <span>’+l+’</span></label>’;}).join(’’) +
+‘<button class="btn btn-p b-sm" style="margin-top:10px" onclick="toast(\'✅ Сохранено\',\'ok\')">💾 Сохранить</button></div>’ +
+‘<div class="card cp"><div class="sh">Следующий визит</div><div class="fg"><label class="fl">Через (дней)</label><input class="fc" type="number" value="30"></div><button class="btn btn-s b-sm" onclick="toast(\'📅 Запланировано\',\'ok\')">📅 Запланировать</button></div></div>’;
+}
 
-    document.querySelectorAll(".nav button").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const section = btn.dataset.section;
-        if (!section) return;
-        setSection(section);
-      });
-    });
+// ═══════════════════════════ REHAB ═══════════════════════════
+function rRehab() {
+document.getElementById(‘p-rehab’).innerHTML =
+‘<div class="ph"><div><div class="ph-t">Реабилитация</div></div><div class="ph-a"><button class="btn btn-s b-md" onclick="aiSend(\'ai-rehab\',\'Составь 3-этапный план реабилитации после PRP коленного сустава, гонартроз 2 ст.\')">🤖 AI-план</button></div></div>’ +
+‘<div class="gm"><div class="card cp"><div class="sh">План реабилитации</div>’ +
+‘<div class="fg"><label class="fl">Пациент</label><select class="fc">’+ptOpts()+’</select></div>’ +
+‘<div class="fg"><label class="fl">Исходный ВАШ 0–10</label><div class="vas"><span style="font-size:10px;color:#94a3b8">0</span><input type="range" min="0" max="10" value="6" oninput="this.nextElementSibling.nextElementSibling.textContent=this.value"><span style="font-size:10px;color:#94a3b8">10</span><div class="vas-n">6</div></div></div>’ +
+‘<div class="stg stg-b"><div style="font-size:11px;font-weight:700;color:#334155;margin-bottom:8px">Этап 1 — Ранний (1–2 нед.)</div><textarea class="fc" rows="2" placeholder="Упражнения, физиотерапия..." style="font-size:11px"></textarea></div>’ +
+‘<div class="stg stg-g"><div style="font-size:11px;font-weight:700;color:#334155;margin-bottom:8px">Этап 2 — Восстановительный (3–8 нед.)</div><textarea class="fc" rows="2" placeholder="Упражнения, нагрузка..." style="font-size:11px"></textarea></div>’ +
+‘<div class="stg stg-a"><div style="font-size:11px;font-weight:700;color:#334155;margin-bottom:8px">Этап 3 — Функциональный (2–4 мес.)</div><textarea class="fc" rows="2" placeholder="Критерии возврата к активности..." style="font-size:11px"></textarea></div>’ +
+‘<button class="btn btn-p b-sm" onclick="toast(\'✅ Сохранено\',\'ok\')">💾 Сохранить план</button></div>’ +
+‘<div class="ai-p" id="ai-rehab"></div></div>’;
+initAI(‘ai-rehab’, ‘Готов составить план реабилитации. Укажите диагноз и цели восстановления.’);
+}
 
-    elSearch.addEventListener("input", () => {
-      renderLeftList();
-    });
+// ═══════════════════════════ CRM ═══════════════════════════
+function rCRM() {
+var pts=DB(‘pts’), now=new Date();
+var active=pts.filter?pts.filter(function(p){return p.status===‘Активный’;}).length:0;
+var srcs={};for(var i=0;i<pts.length;i++){var s=pts[i].src||‘Другое’;srcs[s]=(srcs[s]||0)+1;}
+var scripts=[
+{ico:‘📞’,t:‘Первичный звонок’,b:‘Здравствуйте! Рады помочь. Вас беспокоит конкретный сустав?\nЭто первый визит к нам?\n\n[Первичный]: Отлично, записываем на осмотр ортопеда.\nУдобное время — [варианты]?’},
+{ico:‘💬’,t:‘Объяснение PRP’,b:‘PRP — лечение собственной плазмой крови. Берём кровь, центрифугируем, выделяем плазму с факторами роста — и вводим в сустав под УЗИ-контролем.\n\nБолезненность минимальная. Курс — 3 инъекции.\nЭффект нарастает 1–3 месяца.’},
+{ico:‘💰’,t:‘Возражение «Дорого»’,b:‘Понимаю. В нашу стоимость входит:\n— Врач-ортопед с опытом ___ лет\n— Введение под УЗИ-контролем\n— Наблюдение весь курс\n— Международные расходники\n\nДоступна рассрочка. Рассказать подробнее?’}
+];
+document.getElementById(‘p-crm’).innerHTML =
+‘<div class="ph"><div><div class="ph-t">CRM</div></div></div>’ +
+‘<div class="g4" style="margin-bottom:18px">’ +
+‘<div class="sc" style="background:linear-gradient(135deg,#0071c6,#2563eb)"><div class="sc-v">’+pts.length+’</div><div class="sc-l">Всего пациентов</div></div>’ +
+‘<div class="sc" style="background:linear-gradient(135deg,#059669,#10b981)"><div class="sc-v">’+active+’</div><div class="sc-l">Активных</div></div>’ +
+‘<div class="sc" style="background:linear-gradient(135deg,#dc2626,#fb7185)"><div class="sc-v">’+Math.round(active/Math.max(pts.length,1)*100)+’%</div><div class="sc-l">Удержание</div></div>’ +
+‘<div class="sc" style="background:linear-gradient(135deg,#7c3aed,#8b5cf6)"><div class="sc-v">’+Object.keys(srcs).length+’</div><div class="sc-l">Источников</div></div>’ +
+‘</div>’ +
+‘<div class="g2" style="margin-bottom:18px">’ +
+‘<div class="card cp"><div class="sh">AI-ответ пациенту</div>’ +
+‘<div class="fg"><label class="fl">Сообщение от пациента</label><textarea class="fc" id="crm-msg" rows="3" placeholder="Вставьте вопрос или жалобу пациента..."></textarea></div>’ +
+‘<button class="btn btn-p b-sm" id="crm-btn" onclick="crmAI()">🤖 Сформировать ответ</button>’ +
+‘<div id="crm-reply" style="display:none;margin-top:14px"><div class="al al-g" style="margin-bottom:8px">✅ Ответ готов</div><div id="crm-reply-text" style="background:#f8fafc;border-radius:8px;padding:12px;font-size:13px;line-height:1.7;border:1px solid #e2e8f0;white-space:pre-wrap"></div>’ +
+‘<div style="display:flex;gap:7px;margin-top:8px"><button class="btn btn-p b-xs" onclick="toast(\'📱 Отправлено\',\'ok\')">📱 Отправить</button><button class="btn btn-s b-xs" onclick="navigator.clipboard.writeText(document.getElementById(\'crm-reply-text\').textContent).then(function(){toast(\'📋 Скопировано\')})">📋 Копировать</button></div></div></div>’ +
+‘<div class="card cp"><div class="sh">Источники пациентов</div>’+barChart(srcs)+’</div></div>’ +
+‘<div class="card cp"><div class="sh">Скрипты администратора</div><div class="g3">’+
+scripts.map(function(s){return’<details style="border-radius:8px;border:1px solid #e2e8f0;overflow:hidden"><summary style="display:flex;align-items:center;gap:8px;padding:10px 14px;cursor:pointer;background:#f8fafc;font-size:13px;font-weight:600;user-select:none"><span style="font-size:18px">’+s.ico+’</span>’+s.t+’</summary><div style="padding:12px 14px;font-size:13px;line-height:1.7;white-space:pre-line;color:#334155;border-top:1px solid #e2e8f0">’+esc(s.b)+’</div></details>’;}).join(’’)+
+‘</div></div>’;
+}
+function crmAI() {
+var msg=document.getElementById(‘crm-msg’).value.trim();
+if(!msg){toast(‘⚠ Введите сообщение’,‘err’);return;}
+var btn=document.getElementById(‘crm-btn’); btn.disabled=true; btn.textContent=‘⏳ Генерирую…’;
+aiCall([{role:‘user’,content:‘Пациент клиники написал: “’+msg+’”\nСоставь профессиональный вежливый ответ от имени администратора клиники АльтернативА. Отвечай на русском.’}], AI_SYS, function(err, reply){
+btn.disabled=false; btn.textContent=‘🤖 Сформировать ответ’;
+document.getElementById(‘crm-reply’).style.display=‘block’;
+document.getElementById(‘crm-reply-text’).textContent=err?’Ошибка: ’+err:reply;
+});
+}
 
-    roleSelect.addEventListener("change", () => {
-      renderCenter();
-    });
+// ═══════════════════════════ TEMPLATES ═══════════════════════════
+var TPLS = {
+ortho:{ico:‘🩺’,name:‘Осмотр ортопеда’,txt:‘ПРОТОКОЛ ПЕРВИЧНОГО ОСМОТРА ОРТОПЕДА\n\nДата: ___  Пациент: ___  Возраст: ___ Пол: М/Ж\n\nЖАЛОБЫ:\nЗона: ___  ВАШ: ___/10\nХарактер: ноющая / острая / стартовая\n\nАНАМНЕЗ:\nДавность: ___  Лечение: ___\n\nОСМОТР:\nМасса: ___ кг  Рост: ___ см\nОсь: норма / варус / вальгус\nОтёк: нет / + / ++\nСгибание: ___ °  Разгибание: ___ °\n\nДИАГНОЗ (МКБ-10): ___\n\nПЛАН:\n☐ PRP: ___ инъекций  ☐ УЗИ  ☐ ЛФК\n\nПодпись: ___’},
+prp:{ico:‘💉’,name:‘Протокол PRP’,txt:‘ПРОТОКОЛ PRP-ТЕРАПИИ\n\nДата: ___  Пациент: ___\nВрач: ___  Инъекция: ___ из ___\n\nПРОТИВОПОКАЗАНИЯ:\n☐ Онкология — нет\n☐ Тромбоцитопения — нет\n☐ Инфекция — нет\n☐ НПВС отменены — да\n\nЗАБОР:\nКровь: ___ мл  PRP: ___ мл\nТромбоциты: ___ ×10⁹/л\n\nПРОЦЕДУРА:\nЗона: ___  Контроль: УЗИ\nВведено: ___ мл\n\nРЕКОМЕНДАЦИИ:\n— НПВС: ___ дней  — Тепло: 48 ч\n\nВрач: ___  Пациент: ___’},
+uzi:{ico:‘🔬’,name:‘УЗИ суставов’,txt:‘ПРОТОКОЛ УЗИ\n\nДата: ___  Пациент: ___\nСустав: коленный / тазобедренный / плечевой\n\nЩЕЛЬ медиально: ___ мм (норма ≥4)\nХРЯЩ: ___ мм (норма 2-4)\nВЫПОТ: нет / ___ мл\nСИНОВИЯ: ___ мм (норма ≤2)\nОСТЕОФИТЫ: нет / есть\n\nЗАКЛЮЧЕНИЕ:\nЭхо-признаки артроза ___ ст.\n\nВрач УЗД: ___’},
+pod:{ico:‘🦶’,name:‘Подология’,txt:‘ПРОТОКОЛ ПОДОЛОГИИ\n\nДата: ___  Пациент: ___\n\nЖАЛОБЫ: ___\n\nКОЖА:\nГиперкератоз: нет / есть\nТрещины: нет / есть\nМозоли: нет / есть\n\nДЕФОРМАЦИИ:\nHallux valgus: нет / I / II / III\nПлоскостопие: нет / I / II / III\n\nМАНИПУЛЯЦИИ:\n☐ Обработка гиперкератоза\n☐ Обработка ногтей\n\nСледующий визит через: ___ дней\n\nПодпись: ___’},
+rehab:{ico:‘🏃’,name:‘Реабилитация’,txt:‘ПЛАН РЕАБИЛИТАЦИИ\n\nПациент: ___  Диагноз: ___\nВАШ исходный: ___ / 10\n\nЭТАП 1 (1-2 нед.) — боль, отёк, атрофия:\n1. ___ — ___ раз × ___ подходов\n2. ___\n\nЭТАП 2 (3-8 нед.) — ОМД, мышцы:\n1. ___ — ___ раз × ___ подходов\n2. ***\n\nЭТАП 3 (2-4 мес.) — активность:\n***\n\nКОНТРОЛЬ: 2 нед / 1 мес / 3 мес\n\nПодпись: ___’},
+memo:{ico:‘📱’,name:‘Памятка пациенту’,txt:‘Уважаемый(ая) [Имя]!\n\nПоминаем о PRP-терапии\nДата и время: ___\n\nПОДГОТОВКА:\n✓ За 3 дня — отменить НПВС\n✓ За 2 дня — без алкоголя\n✓ В день — лёгкий завтрак\n\nПОСЛЕ:\n⚠ Боль 1–3 дня — норма\n⚠ Без НПВС ещё ___ дней\n\nСледующая инъекция: ___\n\nКлиника «АльтернативА» 🏥’},
+consent:{ico:‘✍️’,name:‘Согласие на PRP’,txt:‘ИНФОРМИРОВАННОЕ СОГЛАСИЕ\n\nЯ, ___, ДР: ___\n\nОТСУТСТВИЕ ПРОТИВОПОКАЗАНИЙ:\n☐ Онкология — нет\n☐ Тромбоцитопения — нет\n☐ Беременность — нет\n☐ НПВС отменены — да\n\nДАЮ СОГЛАСИЕ на PRP-терапию.\n\nПодпись: ___  Дата: ___\nВрач: ___’},
+epic:{ico:‘📋’,name:‘Выписной эпикриз’,txt:‘ВЫПИСНОЙ ЭПИКРИЗ\n\nПациент: ___  ДР: ___\nПериод: ___ — ___\nДиагноз: ___\n\nЛЕЧЕНИЕ:\n— PRP: ___ инъекций\n— ЛФК: ___\n\nДИНАМИКА:\nВАШ: ___ → ___ / 10\n\nРЕЗУЛЬТАТ: ☐ Улучшение  ☐ Значительное улучшение\n\nРЕКОМЕНДАЦИИ:\n1. ___\n\nКонтроль: ___  Врач: ___’}
+};
+function rTpl() {
+var keys=Object.keys(TPLS);
+var listHtml=keys.map(function(k){var t=TPLS[k];return’<div class="ti'+(k===curTpl?' on':'')+'" id="ti-'+k+'" onclick="loadTpl(\''+k+'\')"><div style="width:32px;height:32px;border-radius:8px;background:#eff6ff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">’+t.ico+’</div><div><div style="font-size:12px;font-weight:700">’+t.name+’</div></div></div>’;}).join(’’);
+document.getElementById(‘p-tpl’).innerHTML =
+‘<div class="ph"><div><div class="ph-t">Шаблоны</div><div class="ph-s">’+keys.length+’ шаблонов + AI-заполнение</div></div></div>’ +
+‘<div style="display:grid;grid-template-columns:210px 1fr 280px;gap:16px">’ +
+‘<div id="tpl-list">’+listHtml+’</div>’ +
+‘<div class="card cp" style="display:flex;flex-direction:column;gap:12px">’ +
+‘<div style="display:flex;align-items:center;justify-content:space-between"><div style="font-size:14px;font-weight:700" id="tpl-name">’+TPLS[curTpl].name+’</div>’ +
+‘<div style="display:flex;gap:7px"><button class="btn btn-s b-sm" onclick="navigator.clipboard.writeText(document.getElementById(\'tpl-body\').value).then(function(){toast(\'📋 Скопировано\')})">📋 Копировать</button><button class="btn btn-p b-sm" id="tpl-ai-btn" onclick="aiTplFill()">🤖 AI-заполнить</button></div></div>’ +
+‘<textarea id="tpl-body" class="fc" style="flex:1;min-height:420px;font-family:monospace;font-size:11px;line-height:1.7;resize:vertical">’+TPLS[curTpl].txt+’</textarea></div>’ +
+‘<div class="ai-p" id="ai-tpl"></div></div>’;
+initAI(‘ai-tpl’, ‘Могу заполнить шаблон реалистичными данными или помочь с документом.’);
+}
+function loadTpl(k) {
+var items=document.querySelectorAll(’.ti’); for(var i=0;i<items.length;i++) items[i].classList.remove(‘on’);
+var el=document.getElementById(‘ti-’+k); if(el) el.classList.add(‘on’);
+curTpl=k;
+document.getElementById(‘tpl-name’).textContent=TPLS[k].name;
+document.getElementById(‘tpl-body’).value=TPLS[k].txt;
+}
+function aiTplFill() {
+var btn=document.getElementById(‘tpl-ai-btn’); btn.disabled=true; btn.textContent=‘⏳…’;
+var t=TPLS[curTpl];
+aiCall([{role:‘user’,content:‘Заполни шаблон “’+t.name+’” реалистичными демо-данными:\n\n’+t.txt}], AI_SYS, function(err, reply){
+btn.disabled=false; btn.textContent=‘🤖 AI-заполнить’;
+if(reply) document.getElementById(‘tpl-body’).value=reply;
+});
+}
 
-    document.getElementById("btn-new-patient").addEventListener("click", () => {
-      alert(
-        "В демо-версии создание пациента не сохраняется на сервере.\nВ реальной МИС здесь должно быть модальное окно с формой."
-      );
-    });
+// ═══════════════════════════ DOCUMENTS ═══════════════════════════
+function rDocs() {
+var docTypes=[‘Протокол первичного осмотра ортопеда’,‘Протокол PRP-терапии’,‘Протокол УЗИ суставов’,‘Выписной эпикриз’,‘Информированное согласие на PRP’,‘Индивидуальный план реабилитации’,‘Памятка: подготовка к PRP’,‘Направление к специалисту’];
+document.getElementById(‘p-docs’).innerHTML =
+‘<div class="ph"><div><div class="ph-t">Документы</div><div class="ph-s">AI-генерация медицинских документов</div></div></div>’ +
+‘<div class="g2"><div class="card cp"><div class="sh">Генерация документа</div>’ +
+‘<div class="fg"><label class="fl">Тип документа</label><select class="fc" id="doc-type">’+docTypes.map(function(d){return’<option>’+d+’</option>’;}).join(’’)+’</select></div>’ +
+‘<div class="fg"><label class="fl">Пациент</label><select class="fc" id="doc-pt">’+ptOpts()+’</select></div>’ +
+‘<div class="fg"><label class="fl">Доп. данные для AI</label><textarea class="fc" id="doc-extra" rows="2" placeholder="Диагноз, особые данные..."></textarea></div>’ +
+‘<button class="btn btn-p b-md" id="doc-btn" onclick="genDoc()">🤖 Сгенерировать</button>’ +
+‘<div id="doc-out" style="display:none;margin-top:14px"><div class="al al-g" style="margin-bottom:8px">✅ Документ готов</div>’ +
+‘<pre id="doc-txt" style="background:#f8fafc;border-radius:8px;padding:14px;font-size:11px;font-family:monospace;line-height:1.7;max-height:300px;overflow-y:auto;border:1px solid #e2e8f0;white-space:pre-wrap;color:#334155"></pre>’ +
+‘<div style="display:flex;gap:7px;margin-top:10px"><button class="btn btn-p b-xs" onclick="toast(\'💾 Сохранено\',\'ok\')">💾 Сохранить</button><button class="btn btn-s b-xs" onclick="navigator.clipboard.writeText(document.getElementById(\'doc-txt\').textContent).then(function(){toast(\'📋 Скопировано\')})">📋 Копировать</button></div></div></div>’ +
+‘<div class="card cp"><div class="sh">Быстрые шаблоны</div>’ +
+[[‘📞’,‘Скрипт первичного звонка’],[‘📱’,‘Памятка перед PRP’],[‘✉️’,‘Follow-up после PRP’],[‘📊’,‘Отчёт за месяц’]].map(function(s){return’<div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;border:1px solid #e2e8f0;margin-bottom:8px;cursor:pointer;transition:.15s" onmouseover="this.style.borderColor=\'#0071c6\';this.style.background=\'#eff6ff\'" onmouseout="this.style.borderColor=\'#e2e8f0\';this.style.background=\'\'"><div style="width:34px;height:34px;border-radius:8px;background:#eff6ff;display:flex;align-items:center;justify-content:center;font-size:18px">’+s[0]+’</div><div style="flex:1;font-size:13px;font-weight:600">’+s[1]+’</div><button class="btn btn-s b-xs" onclick="toast(\''+s[1]+'\')">→</button></div>’;}).join(’’) +
+‘</div></div>’;
+}
+function genDoc() {
+var tp=document.getElementById(‘doc-type’).value;
+var ptId=document.getElementById(‘doc-pt’).value;
+var extra=document.getElementById(‘doc-extra’).value||’’;
+var pts=DB(‘pts’); var pt=null; for(var i=0;i<pts.length;i++) if(pts[i].id===ptId){pt=pts[i];break;}
+var ctx=pt?pt.fam+’ ‘+pt.nam+’, ‘+(calcAge(pt.dob)||’?’)+’ лет’+(pt.diag?’, ‘+pt.diag:’’):‘пациент клиники’;
+var btn=document.getElementById(‘doc-btn’); btn.disabled=true; btn.textContent=‘⏳ Генерирую…’;
+document.getElementById(‘doc-out’).style.display=‘block’;
+document.getElementById(‘doc-txt’).textContent=‘Генерирую…’;
+aiCall([{role:‘user’,content:‘Составь «’+tp+’» для: ‘+ctx+’. ‘+extra+’\nДокумент должен быть профессиональным и полным.’}], AI_SYS, function(err, reply){
+btn.disabled=false; btn.textContent=‘🤖 Сгенерировать’;
+document.getElementById(‘doc-txt’).textContent=err?’Ошибка: ’+err:reply;
+});
+}
 
-    // ИНИЦИАЛИЗАЦИЯ
-    setSection("patients");
-  </script>
+// ═══════════════════════════ ANALYTICS ═══════════════════════════
+function rAna() {
+var pts=DB(‘pts’), prps=DB(‘prp’), vis=DB(‘vis’);
+var diags={}, srcs={}, statuses={};
+for(var i=0;i<pts.length;i++){
+var p=pts[i];
+if(p.diag){var k=p.diag.split(’ ‘).slice(0,2).join(’ ‘);diags[k]=(diags[k]||0)+1;}
+srcs[p.src||‘Другое’]=(srcs[p.src||‘Другое’]||0)+1;
+statuses[p.status||‘Активный’]=(statuses[p.status||‘Активный’]||0)+1;
+}
+document.getElementById(‘p-ana’).innerHTML =
+‘<div class="ph"><div><div class="ph-t">Аналитика</div></div></div>’ +
+‘<div class="g4" style="margin-bottom:18px">’ +
+‘<div class="sc" style="background:linear-gradient(135deg,#0071c6,#2563eb)"><div class="sc-v">’+pts.length+’</div><div class="sc-l">Пациентов</div></div>’ +
+‘<div class="sc" style="background:linear-gradient(135deg,#059669,#10b981)"><div class="sc-v">’+prps.length+’</div><div class="sc-l">PRP процедур</div></div>’ +
+‘<div class="sc" style="background:linear-gradient(135deg,#7c3aed,#8b5cf6)"><div class="sc-v">’+vis.length+’</div><div class="sc-l">Визитов</div></div>’ +
+‘<div class="sc" style="background:linear-gradient(135deg,#d97706,#f59e0b)"><div class="sc-v">’+(pts.filter?pts.filter(function(p){return p.status===‘Активный’;}).length:0)+’</div><div class="sc-l">Активных</div></div>’ +
+‘</div>’ +
+‘<div class="g3" style="margin-bottom:16px">’ +
+‘<div class="card cp"><div class="sh">Диагнозы МКБ-10</div>’+barChart(diags)+’</div>’ +
+‘<div class="card cp"><div class="sh">Источники</div>’+barChart(srcs)+’</div>’ +
+‘<div class="card cp"><div class="sh">Статусы</div>’+barChart(statuses)+’</div>’ +
+‘</div>’ +
+‘<div class="card cp"><div class="sh">AI-аналитика</div><div class="al al-b" style="margin-bottom:10px">📊 AI проанализирует данные и даст рекомендации.</div><button class="btn btn-p b-sm" onclick="aiAna()">🤖 AI-анализ</button><div id="ana-result" style="margin-top:12px"></div></div>’;
+}
+function aiAna() {
+var pts=DB(‘pts’), prps=DB(‘prp’);
+var res=document.getElementById(‘ana-result’);
+res.innerHTML=’<div class="al al-b">⏳ Анализирую…</div>’;
+aiCall([{role:‘user’,content:‘Проанализируй данные клиники «АльтернативА»:\n- Пациентов: ‘+pts.length+’\n- PRP процедур: ‘+prps.length+’\n- Активных: ‘+(pts.filter?pts.filter(function(p){return p.status===‘Активный’;}).length:0)+’\nДай 3-5 конкретных рекомендаций.’}], AI_SYS, function(err, reply){
+res.innerHTML=’<div style="background:#f8fafc;border-radius:8px;padding:14px;font-size:13px;line-height:1.7;border:1px solid #e2e8f0;white-space:pre-wrap">’+esc(err?‘Ошибка: ‘+err:reply)+’</div>’;
+});
+}
+
+// ═══════════════════════════ STOCK ═══════════════════════════
+function rStock() {
+var stk=DB(‘stk’);
+var rows=’’;
+if(!stk.length){rows=’<tr><td colspan="6"><div class="empty"><div class="e-ico">📦</div><div class="e-tit">Склад пуст</div></div></td></tr>’;}
+else{for(var i=0;i<stk.length;i++){var s=stk[i];rows+=’<tr><td><b>’+esc(s.name)+’</b></td><td><span class="badge bdsl" style="font-size:10px">’+esc(s.cat||’—’)+’</span></td><td style="font-family:monospace;font-size:11px;color:#94a3b8">’+esc(s.lot||’—’)+’</td><td>’+fmtD(s.exp)+’</td><td style="font-weight:600">’+esc(s.qty||’—’)+’</td><td>’+sbadge(s.status||‘В наличии’)+’</td><td style="text-align:right"><button class="btn btn-d b-xs" onclick="delStock(\''+s.id+'\')">🗑</button></td></tr>’;}}
+var warn=stk.filter?stk.filter(function(s){return s.status===‘Заканчивается’;}).length:0;
+document.getElementById(‘p-stock’).innerHTML =
+‘<div class="ph"><div><div class="ph-t">Склад</div></div><div class="ph-a"><button class="btn btn-p b-md" onclick="openStockModal()">+ Приход</button></div></div>’ +
+‘<div class="g3" style="margin-bottom:18px">’ +
+‘<div class="sc" style="background:linear-gradient(135deg,#0071c6,#2563eb)"><div class="sc-v">’+stk.length+’</div><div class="sc-l">Позиций</div></div>’ +
+‘<div class="sc" style="background:linear-gradient(135deg,#059669,#10b981)"><div class="sc-v">’+(stk.filter?stk.filter(function(s){return s.status===‘В наличии’;}).length:0)+’</div><div class="sc-l">В наличии</div></div>’ +
+‘<div class="sc" style="background:linear-gradient(135deg,#dc2626,#fb7185)"><div class="sc-v">’+(stk.filter?stk.filter(function(s){return s.status===‘Нет в наличии’;}).length:0)+’</div><div class="sc-l">Нет в наличии</div></div>’ +
+‘</div>’ +
+(warn?’<div class="al al-a" style="margin-bottom:14px">⚠ ‘+warn+’ позиций заканчивается — нужен заказ!</div>’:’’) +
+‘<div class="card" style="overflow:hidden"><table class="tbl"><thead><tr><th>Наименование</th><th>Категория</th><th>Партия</th><th>Срок</th><th>Кол-во</th><th>Статус</th><th></th></tr></thead><tbody>’+rows+’</tbody></table></div>’;
+}
+function openStockModal() {
+document.getElementById(‘mb-stock’).innerHTML =
+‘<div class="fg"><label class="fl">Наименование *</label><input class="fc" id="sk-name" placeholder="Пробирки Regen Lab ACP®"></div>’ +
+‘<div class="g3"><div class="fg"><label class="fl">Количество</label><input class="fc" id="sk-qty" type="number" placeholder="10"></div><div class="fg"><label class="fl">Партия / LOT</label><input class="fc" id="sk-lot" placeholder="L240301"></div><div class="fg"><label class="fl">Срок годности</label><input class="fc" id="sk-exp" type="date"></div></div>’ +
+‘<div class="g2"><div class="fg"><label class="fl">Категория</label><select class="fc" id="sk-cat"><option>Расходные PRP</option><option>Расходные УЗИ</option><option>Анестетики</option><option>Антисептики</option><option>Другое</option></select></div><div class="fg"><label class="fl">Статус</label><select class="fc" id="sk-status"><option>В наличии</option><option>Заканчивается</option><option>Нет в наличии</option></select></div></div>’ +
+‘<div class="m-foot"><button class="btn btn-s b-md" onclick="closeModal(\'m-stock\')">Отмена</button><button class="btn btn-p b-md" onclick="saveStock()">📦 Оформить приход</button></div>’;
+openModal(‘m-stock’);
+}
+function saveStock() {
+var name=document.getElementById(‘sk-name’).value.trim();
+if(!name){toast(‘⚠ Укажите наименование’,‘err’);return;}
+var s={id:uid(‘sk’),name:name,qty:document.getElementById(‘sk-qty’).value,lot:document.getElementById(‘sk-lot’).value,exp:document.getElementById(‘sk-exp’).value,cat:document.getElementById(‘sk-cat’).value,status:document.getElementById(‘sk-status’).value||‘В наличии’};
+var stk=DB(‘stk’); stk.unshift(s); DBs(‘stk’,stk);
+closeModal(‘m-stock’); rStock(); toast(‘✅ Позиция добавлена’,‘ok’);
+}
+function delStock(id){confirm2(‘Удалить позицию?’,‘Позиция будет удалена.’,function(){DBs(‘stk’,DB(‘stk’).filter(function(x){return x.id!==id;}));rStock();toast(‘🗑 Удалено’);});}
+
+// ═══════════════════════════ USERS ═══════════════════════════
+function rUsers() {
+var users=DB(‘users’);
+var RG={director:‘linear-gradient(135deg,#7c3aed,#a78bfa)’,doctor:‘linear-gradient(135deg,#0071c6,#36aaf5)’,admin:‘linear-gradient(135deg,#dc2626,#fb7185)’};
+var RL={director:‘👑 Руководитель’,doctor:‘🩺 Врач’,admin:‘📋 Администратор’};
+var usersHtml=’’;
+if(!users.length){usersHtml=’<div class="empty" style="padding:24px"><div class="e-ico">👤</div><div class="e-tit">Нет сотрудников</div></div>’;}
+else{for(var i=0;i<users.length;i++){var u=users[i];usersHtml+=’<div class="usr"><div class="av av-s" style="background:'+(RG[u.role]||'#666')+'">’+getIni(u.name)+’</div><div style="flex:1"><div style="font-size:13px;font-weight:600">’+esc(u.name)+’</div><div style="font-size:11px;color:#94a3b8">’+esc(u.login)+’ · ‘+(RL[u.role]||u.role)+’</div></div><button class="btn btn-d b-xs" onclick="delUser(\''+u.id+'\',\''+esc(u.login)+'\')">🗑</button></div>’;}}
+document.getElementById(‘p-users’).innerHTML =
+‘<div class="ph"><div><div class="ph-t">Пользователи</div></div><div class="ph-a"><button class="btn btn-p b-md" onclick="openUserModal()">+ Добавить</button></div></div>’ +
+‘<div class="al al-v" style="margin-bottom:16px">🔐 Новые пользователи могут входить с указанным логином и паролем.</div>’ +
+‘<div class="g2"><div class="card cp"><div class="sh">Сотрудники (’+users.length+’)</div>’+usersHtml+’</div>’ +
+‘<div class="card cp"><div class="sh">Матрица прав</div><table class="tbl"><thead><tr><th>Модуль</th><th>👑</th><th>🩺</th><th>📋</th></tr></thead><tbody>’ +
+[[‘База пациентов’,‘✅’,‘✅’,‘👁’],[‘ЭМК / Протоколы’,‘✅’,‘✅’,‘❌’],[‘PRP / УЗИ’,‘✅’,‘✅’,‘❌’],[‘CRM’,‘✅’,‘✅’,‘✅’],[‘Аналитика’,‘✅’,‘❌’,‘❌’],[‘Склад’,‘✅’,‘❌’,‘❌’],[‘Пользователи’,‘✅’,‘❌’,‘❌’]].map(function(r){return’<tr><td><b>’+r[0]+’</b></td><td>’+r[1]+’</td><td>’+r[2]+’</td><td>’+r[3]+’</td></tr>’;}).join(’’) +
+‘</tbody></table></div></div>’;
+}
+function openUserModal() {
+document.getElementById(‘mb-user’).innerHTML =
+‘<div class="g2"><div class="fg"><label class="fl">ФИО *</label><input class="fc" id="au-name" placeholder="Иванов Павел Сергеевич"></div><div class="fg"><label class="fl">Должность</label><input class="fc" id="au-pos" placeholder="Ортопед-травматолог"></div></div>’ +
+‘<div class="g2"><div class="fg"><label class="fl">Роль *</label><select class="fc" id="au-role"><option value="doctor">🩺 Врач</option><option value="admin">📋 Администратор</option><option value="director">👑 Руководитель</option></select></div><div class="fg"><label class="fl">Телефон</label><input class="fc" id="au-tel"></div></div>’ +
+‘<div class="g2"><div class="fg"><label class="fl">Логин *</label><input class="fc" id="au-login" placeholder="doctor2" autocomplete="off"></div><div class="fg"><label class="fl">Пароль * (≥4)</label><input class="fc" id="au-pass" type="password" autocomplete="new-password"></div></div>’ +
+‘<div class="m-foot"><button class="btn btn-s b-md" onclick="closeModal(\'m-user\')">Отмена</button><button class="btn btn-p b-md" onclick="saveUser()">✅ Создать</button></div>’;
+openModal(‘m-user’);
+}
+function saveUser() {
+var name=document.getElementById(‘au-name’).value.trim();
+var login=document.getElementById(‘au-login’).value.trim().toLowerCase();
+var pass=document.getElementById(‘au-pass’).value||’’;
+if(!name||!login||pass.length<4){toast(‘⚠ Заполните все поля (пароль ≥4)’,‘err’);return;}
+var extra=lsGet(‘mis_accs’,null)||{};
+if(extra[login]||ACCOUNTS[login]){toast(‘⚠ Логин уже занят’,‘err’);return;}
+var role=document.getElementById(‘au-role’).value||‘doctor’;
+var users=DB(‘users’);
+users.push({id:uid(‘u’),name:name,login:login,role:role,pos:document.getElementById(‘au-pos’).value.trim()});
+DBs(‘users’,users);
+extra[login]={pass:pass,role:role,name:name,ini:getIni(name)};
+lsSet(‘mis_accs’,extra);
+closeModal(‘m-user’); rUsers(); toast(’✅ Пользователь ‘+name+’ создан · логин: ’+login,‘ok’);
+}
+function delUser(id, login) {
+confirm2(‘Удалить пользователя?’,‘Пользователь будет удалён.’, function(){
+DBs(‘users’, DB(‘users’).filter(function(u){return u.id!==id;}));
+var extra=lsGet(‘mis_accs’,null)||{};
+delete extra[login]; lsSet(‘mis_accs’,extra);
+rUsers(); toast(‘🗑 Удалён’);
+});
+}
+
+// ═══════════════════════════ SEED DEMO DATA ═══════════════════════════
+(function() {
+try {
+if (DB(‘pts’).length) return;
+DBs(‘pts’, [
+{id:‘pt_1’,fam:‘Иванова’,nam:‘Мария’,pat:‘Сергеевна’,dob:‘1975-03-15’,sex:‘Ж’,tel:’+7 916 123-45-67’,email:‘ivanova@mail.ru’,src:‘Рекомендация’,status:‘Активный’,diag:‘M17.1 — Первичный гонартроз’,next:today(),doc:‘Петров И.И.’,note:’’,created:today()},
+{id:‘pt_2’,fam:‘Петров’,nam:‘Александр’,pat:‘Иванович’,dob:‘1968-07-22’,sex:‘М’,tel:’+7 903 234-56-78’,email:’’,src:‘Яндекс’,status:‘Наблюдается’,diag:‘M16.1 — Коксартроз’,next:’’,doc:‘Петров И.И.’,note:’’,created:today()},
+{id:‘pt_3’,fam:‘Сидорова’,nam:‘Елена’,pat:’’,dob:‘1982-11-08’,sex:‘Ж’,tel:’+7 985 345-67-89’,email:’’,src:‘2GIS’,status:‘Первичный’,diag:‘M75.1 — Тендинит’,next:’’,doc:’’,note:’’,created:today()}
+]);
+DBs(‘prp’, [
+{id:‘prp_1’,ptId:‘pt_1’,num:‘1 из 3’,zone:‘Коленный правый’,date:today(),ctrl:‘УЗИ-навигация’,blood:‘27’,vol:‘4’,plt:‘850’,status:‘В процессе’,note:‘Хорошая переносимость’},
+{id:‘prp_2’,ptId:‘pt_2’,num:‘1 из 3’,zone:‘Тазобедренный правый’,date:today(),ctrl:‘УЗИ-навигация’,blood:‘27’,vol:‘4’,plt:’’,status:‘В процессе’,note:’’}
+]);
+DBs(‘stk’, [
+{id:‘sk_1’,name:‘Пробирки Regen Lab ACP®’,qty:‘8’,lot:‘L240301’,exp:‘2025-12-01’,cat:‘Расходные PRP’,status:‘В наличии’},
+{id:‘sk_2’,name:‘Лидокаин 2% ампулы’,qty:‘2’,lot:‘L240115’,exp:‘2025-06-01’,cat:‘Анестетики’,status:‘Заканчивается’},
+{id:‘sk_3’,name:‘Хлоргексидин 0.05%’,qty:‘5’,lot:‘L240201’,exp:‘2026-01-01’,cat:‘Антисептики’,status:‘В наличии’}
+]);
+DBs(‘vis’, [
+{id:‘v_1’,ptId:‘pt_1’,date:today(),time:‘10:00’,type:‘PRP-инъекция’,note:‘Первая инъекция’},
+{id:‘v_2’,ptId:‘pt_2’,date:today(),time:‘11:30’,type:‘Первичный осмотр’,note:’’}
+]);
+} catch(e) { /* ignore seed errors */ }
+})();
+</script>
+
 </body>
 </html>
